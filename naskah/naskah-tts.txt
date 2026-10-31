@@ -1,0 +1,65 @@
+hook-00	Lampu neon menyala merah jingga. Kembang api tembaga memancarkan hijau kebiruan.
+hook-01	Cahaya bintang yang ditembakkan ke prisma ternyata dipotong garis-garis gelap yang tajam.
+hook-02	Setiap unsur punya warna dan garisnya sendiri, seperti sidik jari.
+hook-03	Pada awal abad kedua puluh, garis-garis ini menjadi petunjuk untuk membuka rahasia terbesar fisika:
+hook-04	bagaimana atom sebenarnya tersusun.
+hook-05	Jawabannya menuntun langsung ke kimia kuantum.
+roadmap-00	Video ini membahas fisika atom dalam tiga bagian.
+roadmap-01	Bagian pertama, jejak sejarah: model Tomson, percobaan Raderford, dan krisis atom klasik.
+roadmap-02	Bagian kedua, atom Bohr: spektrum garis, postulat Bohr, tingkat energi, energi ionisasi, dan deret Balmer.
+roadmap-03	Bagian ketiga, menuju kimia kuantum: keterbatasan Bohr, gelombang elektron, dan orbital.
+thomson-00	Tahun delapan belas sembilan puluh tujuh, J. J. Tomson menemukan elektron: partikel bermuatan negatif yang jauh lebih ringan dari atom.
+thomson-01	Massanya sekitar seperseribu delapan ratus tiga puluh enam massa proton.
+thomson-02	Karena atom netral, Tomson membayangkan elektron tertanam dalam bola bermuatan positif yang merata, seperti kismis dalam roti.
+rutherford-00	Di laboratorium Ernest Raderford, Gaiger dan Marsden menembakkan partikel alfa ke lembaran emas yang sangat tipis.
+rutherford-01	Bila model Tomson benar, partikel alfa seharusnya menembus dengan sedikit belokan.
+rutherford-02	Sebagian besar memang menembus lurus. Tetapi sekitar satu dari delapan ribu memantul ke belakang.
+rutherford-03	Raderford berkata, rasanya seperti menembakkan peluru meriam ke kertas tisu, lalu pelurunya memantul kembali.
+rutherford-04	Tahun sembilan belas sebelas, Raderford menyimpulkan: muatan positif dan hampir seluruh massa atom terkumpul dalam inti yang sangat kecil.
+rutherford-05	Inti berukuran sekitar sepuluh pangkat minus lima belas meter, seratus ribu kali lebih kecil dari atom. Bila atom sebesar stadion, intinya hanya sebesar kelereng.
+crisis-00	Raderford membayangkan elektron mengorbit inti seperti planet mengelilingi matahari.
+crisis-01	Tetapi menurut teori elektromagnetik, muatan yang bergerak melingkar terus memancarkan gelombang elektromagnetik.
+crisis-02	Elektron akan kehilangan energi, berputar spiral, dan jatuh ke inti dalam waktu sekitar sepersepuluh miliar detik.
+crisis-03	Atom seharusnya runtuh seketika, dan spektrumnya seharusnya kontinu. Kenyataannya atom stabil, dan spektrumnya berupa garis.
+lines-00	Lewatkan arus listrik melalui gas hidrogen bertekanan rendah, lalu uraikan cahayanya dengan prisma.
+lines-01	Yang muncul bukan pelangi utuh, melainkan beberapa garis tajam: merah, hijau kebiruan, biru, dan ungu.
+lines-02	Garis merahnya berpanjang gelombang enam ratus lima puluh enam nanometer.
+lines-03	Tahun delapan belas delapan puluh lima, Yohan Balmer menemukan bahwa panjang gelombang garis-garis ini mengikuti satu rumus sederhana. Tetapi tidak ada yang tahu mengapa.
+bohr-00	Tahun sembilan belas tiga belas, Nils Bohr mengajukan gagasan berani.
+bohr-01	Pertama, elektron hanya boleh berada pada orbit-orbit tertentu, dan di orbit itu ia tidak memancarkan energi.
+bohr-02	Orbit yang diizinkan adalah yang momentum sudutnya kelipatan bulat ha per dua pi.
+bohr-03	Kedua, elektron dapat melompat antarorbit. Saat turun, ia memancarkan satu foton yang energinya tepat sama dengan selisih energi kedua orbit.
+bohr-04	Gagasan ini melawan fisika klasik, tetapi menjelaskan semua garis hidrogen dengan tepat.
+levels-00	Dari postulat itu, Bohr menurunkan jari-jari orbit: er ke-n sama dengan n kuadrat dikali a nol, dengan a nol sekitar nol koma nol lima tiga nanometer.
+levels-01	Energinya E ke-n sama dengan minus tiga belas koma enam elektronvolt dibagi n kuadrat.
+levels-02	Tingkat pertama minus tiga belas koma enam, tingkat kedua minus tiga koma empat, tingkat ketiga minus satu koma lima satu elektronvolt.
+levels-03	Makin tinggi n, tingkatnya makin rapat, dan mendekati nol.
+levels-04	Tanda minus berarti elektron terikat: perlu energi untuk melepaskannya.
+ionization-00	Energi ionisasi adalah energi minimum untuk melepaskan elektron dari keadaan dasar sampai tak terhingga.
+ionization-01	Untuk hidrogen, itu berarti dari n sama dengan satu ke n tak terhingga: tepat tiga belas koma enam elektronvolt.
+ionization-02	Dalam satuan kimia, itu sekitar seribu tiga ratus dua belas kilojul per mol, persis sama dengan hasil pengukuran.
+ionization-03	Foton dengan panjang gelombang di bawah sembilan puluh satu nanometer, di daerah ultraungu jauh, mampu mengionkan atom hidrogen.
+balmer-00	Sekarang garis-garis hidrogen punya penjelasan.
+balmer-01	Elektron yang turun dari tingkat tiga ke tingkat dua melepaskan foton satu koma delapan sembilan elektronvolt: itulah garis merah enam ratus lima puluh enam nanometer.
+balmer-02	Dari empat ke dua, garis hijau kebiruan empat ratus delapan puluh enam nanometer. Dari lima ke dua, garis biru empat ratus tiga puluh empat nanometer.
+balmer-03	Semua lompatan yang berakhir di tingkat dua membentuk deret Balmer, yang tampak oleh mata.
+balmer-04	Lompatan yang berakhir di tingkat satu membentuk deret Laiman di ultraungu, dan yang berakhir di tingkat tiga membentuk deret Pasyen di inframerah.
+balmer-05	Satu rumus Ridberg menjelaskan semuanya: satu per lambda sama dengan R, dikali selisih satu per n kuadrat.
+limits-00	Model Bohr luar biasa untuk hidrogen. Tetapi ia gagal untuk atom berelektron banyak, bahkan untuk helium.
+limits-01	Ia tidak bisa menjelaskan mengapa sebagian garis lebih terang daripada yang lain, atau mengapa garis terbelah di dalam medan magnet.
+limits-02	Dan Bohr tidak menjelaskan mengapa hanya orbit tertentu yang diizinkan. Ia hanya menetapkannya.
+matterwave-00	Jawabannya datang dari de Broi: elektron adalah gelombang, dengan panjang gelombang ha per pe.
+matterwave-01	Gelombang yang mengelilingi inti harus bertemu dirinya sendiri dengan mulus. Hanya orbit yang kelilingnya memuat bilangan bulat panjang gelombang yang bertahan.
+matterwave-02	Syarat itu tepat sama dengan aturan momentum sudut Bohr. Kuantisasi ternyata adalah gelombang berdiri.
+matterwave-03	Tahun sembilan belas dua puluh enam, Erwin Syrodinger menulis persamaan gelombang untuk elektron, dan tingkat energi hidrogen muncul dengan sendirinya.
+orbitals-00	Dalam mekanika kuantum, elektron tidak lagi punya lintasan yang tajam.
+orbitals-01	Yang ada adalah orbital: awan peluang yang menunjukkan di mana elektron mungkin ditemukan.
+orbitals-02	Orbital satu es berbentuk bola. Orbital dua pe berbentuk dua cuping. Orbital tiga de punya empat cuping.
+orbitals-03	Bentuk-bentuk orbital inilah yang menentukan bagaimana atom berikatan, sudut ikatan molekul, dan susunan tabel periodik.
+orbitals-04	Di sinilah fisika atom berakhir, dan kimia kuantum dimulai.
+recap-00	Mari rangkum.
+recap-01	Raderford menemukan inti yang sangat kecil, tetapi atom klasik seharusnya runtuh.
+recap-02	Bohr mengusulkan orbit terkuantisasi: E ke-n sama dengan minus tiga belas koma enam elektronvolt per n kuadrat.
+recap-03	Lompatan antartingkat menghasilkan garis spektrum: Laiman, Balmer, dan Pasyen. Energi ionisasi hidrogen tiga belas koma enam elektronvolt.
+recap-04	De Broi dan Syrodinger menunjukkan bahwa kuantisasi lahir dari elektron sebagai gelombang berdiri, dan orbit berubah menjadi orbital.
+recap-05	Jadi, setiap kali melihat cahaya berwarna dari suatu unsur, tanyakan: dari tingkat mana elektron itu jatuh, dan ke tingkat mana?

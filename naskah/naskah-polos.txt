@@ -1,0 +1,106 @@
+[00:00] Lampu neon, kembang api, dan bintang
+
+Lampu neon menyala merah jingga. Kembang api tembaga memancarkan hijau kebiruan.
+Cahaya bintang yang ditembakkan ke prisma ternyata dipotong garis-garis gelap yang tajam.
+Setiap unsur punya warna dan garisnya sendiri, seperti sidik jari.
+Pada awal abad kedua puluh, garis-garis ini menjadi petunjuk untuk membuka rahasia terbesar fisika:
+bagaimana atom sebenarnya tersusun.
+Jawabannya menuntun langsung ke kimia kuantum.
+
+[00:43] Peta video
+
+Video ini membahas fisika atom dalam tiga bagian.
+Bagian pertama, jejak sejarah: model Thomson, percobaan Rutherford, dan krisis atom klasik.
+Bagian kedua, atom Bohr: spektrum garis, postulat Bohr, tingkat energi, energi ionisasi, dan deret Balmer.
+Bagian ketiga, menuju kimia kuantum: keterbatasan Bohr, gelombang elektron, dan orbital.
+
+[01:13] Bab 01 — Model roti kismis Thomson
+
+Tahun delapan belas sembilan puluh tujuh, J. J. Thomson menemukan elektron: partikel bermuatan negatif yang jauh lebih ringan dari atom.
+Massanya sekitar seperseribu delapan ratus tiga puluh enam massa proton.
+Karena atom netral, Thomson membayangkan elektron tertanam dalam bola bermuatan positif yang merata, seperti kismis dalam roti.
+
+[01:41] Bab 02 — Percobaan hamburan Rutherford
+
+Di laboratorium Ernest Rutherford, Geiger dan Marsden menembakkan partikel alfa ke lembaran emas yang sangat tipis.
+Bila model Thomson benar, partikel alfa seharusnya menembus dengan sedikit belokan.
+Sebagian besar memang menembus lurus. Tetapi sekitar satu dari delapan ribu memantul ke belakang.
+Rutherford berkata, rasanya seperti menembakkan peluru meriam ke kertas tisu, lalu pelurunya memantul kembali.
+Tahun sembilan belas sebelas, Rutherford menyimpulkan: muatan positif dan hampir seluruh massa atom terkumpul dalam inti yang sangat kecil.
+Inti berukuran sekitar sepuluh pangkat minus lima belas meter, seratus ribu kali lebih kecil dari atom. Bila atom sebesar stadion, intinya hanya sebesar kelereng.
+
+[02:36] Bab 03 — Krisis atom klasik
+
+Rutherford membayangkan elektron mengorbit inti seperti planet mengelilingi matahari.
+Tetapi menurut teori elektromagnetik, muatan yang bergerak melingkar terus memancarkan gelombang elektromagnetik.
+Elektron akan kehilangan energi, berputar spiral, dan jatuh ke inti dalam waktu sekitar sepersepuluh miliar detik.
+Atom seharusnya runtuh seketika, dan spektrumnya seharusnya kontinu. Kenyataannya atom stabil, dan spektrumnya berupa garis.
+
+[03:11] Bab 04 — Spektrum garis
+
+Lewatkan arus listrik melalui gas hidrogen bertekanan rendah, lalu uraikan cahayanya dengan prisma.
+Yang muncul bukan pelangi utuh, melainkan beberapa garis tajam: merah, hijau kebiruan, biru, dan ungu.
+Garis merahnya berpanjang gelombang enam ratus lima puluh enam nanometer.
+Tahun delapan belas delapan puluh lima, Johann Balmer menemukan bahwa panjang gelombang garis-garis ini mengikuti satu rumus sederhana. Tetapi tidak ada yang tahu mengapa.
+
+[03:48] Bab 05 — Postulat Bohr
+
+Tahun sembilan belas tiga belas, Niels Bohr mengajukan gagasan berani.
+Pertama, elektron hanya boleh berada pada orbit-orbit tertentu, dan di orbit itu ia tidak memancarkan energi.
+Orbit yang diizinkan adalah yang momentum sudutnya kelipatan bulat h per dua pi.
+Kedua, elektron dapat melompat antarorbit. Saat turun, ia memancarkan satu foton yang energinya tepat sama dengan selisih energi kedua orbit.
+Gagasan ini melawan fisika klasik, tetapi menjelaskan semua garis hidrogen dengan tepat.
+
+[04:28] Bab 06 — Tingkat energi atom hidrogen
+
+Dari postulat itu, Bohr menurunkan jari-jari orbit: r ke-n sama dengan n kuadrat dikali a nol, dengan a nol sekitar nol koma nol lima tiga nanometer.
+Energinya E ke-n sama dengan minus tiga belas koma enam elektronvolt dibagi n kuadrat.
+Tingkat pertama minus tiga belas koma enam, tingkat kedua minus tiga koma empat, tingkat ketiga minus satu koma lima satu elektronvolt.
+Makin tinggi n, tingkatnya makin rapat, dan mendekati nol.
+Tanda minus berarti elektron terikat: perlu energi untuk melepaskannya.
+
+[05:09] Bab 07 — Energi ionisasi
+
+Energi ionisasi adalah energi minimum untuk melepaskan elektron dari keadaan dasar sampai tak terhingga.
+Untuk hidrogen, itu berarti dari n sama dengan satu ke n tak terhingga: tepat tiga belas koma enam elektronvolt.
+Dalam satuan kimia, itu sekitar seribu tiga ratus dua belas kilojoule per mol, persis sama dengan hasil pengukuran.
+Foton dengan panjang gelombang di bawah sembilan puluh satu nanometer, di daerah ultraungu jauh, mampu mengionkan atom hidrogen.
+
+[05:47] Bab 08 — Deret Balmer dan deret lainnya
+
+Sekarang garis-garis hidrogen punya penjelasan.
+Elektron yang turun dari tingkat tiga ke tingkat dua melepaskan foton satu koma delapan sembilan elektronvolt: itulah garis merah enam ratus lima puluh enam nanometer.
+Dari empat ke dua, garis hijau kebiruan empat ratus delapan puluh enam nanometer. Dari lima ke dua, garis biru empat ratus tiga puluh empat nanometer.
+Semua lompatan yang berakhir di tingkat dua membentuk deret Balmer, yang tampak oleh mata.
+Lompatan yang berakhir di tingkat satu membentuk deret Lyman di ultraungu, dan yang berakhir di tingkat tiga membentuk deret Paschen di inframerah.
+Satu rumus Rydberg menjelaskan semuanya: satu per lambda sama dengan R, dikali selisih satu per n kuadrat.
+
+[06:41] Bab 09 — Keterbatasan model Bohr
+
+Model Bohr luar biasa untuk hidrogen. Tetapi ia gagal untuk atom berelektron banyak, bahkan untuk helium.
+Ia tidak bisa menjelaskan mengapa sebagian garis lebih terang daripada yang lain, atau mengapa garis terbelah di dalam medan magnet.
+Dan Bohr tidak menjelaskan mengapa hanya orbit tertentu yang diizinkan. Ia hanya menetapkannya.
+
+[07:09] Bab 10 — Elektron sebagai gelombang berdiri
+
+Jawabannya datang dari de Broglie: elektron adalah gelombang, dengan panjang gelombang h per p.
+Gelombang yang mengelilingi inti harus bertemu dirinya sendiri dengan mulus. Hanya orbit yang kelilingnya memuat bilangan bulat panjang gelombang yang bertahan.
+Syarat itu tepat sama dengan aturan momentum sudut Bohr. Kuantisasi ternyata adalah gelombang berdiri.
+Tahun sembilan belas dua puluh enam, Erwin Schrödinger menulis persamaan gelombang untuk elektron, dan tingkat energi hidrogen muncul dengan sendirinya.
+
+[07:48] Bab 11 — Dari orbit ke orbital
+
+Dalam mekanika kuantum, elektron tidak lagi punya lintasan yang tajam.
+Yang ada adalah orbital: awan peluang yang menunjukkan di mana elektron mungkin ditemukan.
+Orbital satu s berbentuk bola. Orbital dua p berbentuk dua cuping. Orbital tiga d punya empat cuping.
+Bentuk-bentuk orbital inilah yang menentukan bagaimana atom berikatan, sudut ikatan molekul, dan susunan tabel periodik.
+Di sinilah fisika atom berakhir, dan kimia kuantum dimulai.
+
+[08:25] Bab 12 — Rangkuman
+
+Mari rangkum.
+Rutherford menemukan inti yang sangat kecil, tetapi atom klasik seharusnya runtuh.
+Bohr mengusulkan orbit terkuantisasi: E ke-n sama dengan minus tiga belas koma enam elektronvolt per n kuadrat.
+Lompatan antartingkat menghasilkan garis spektrum: Lyman, Balmer, dan Paschen. Energi ionisasi hidrogen tiga belas koma enam elektronvolt.
+De Broglie dan Schrödinger menunjukkan bahwa kuantisasi lahir dari elektron sebagai gelombang berdiri, dan orbit berubah menjadi orbital.
+Jadi, setiap kali melihat cahaya berwarna dari suatu unsur, tanyakan: dari tingkat mana elektron itu jatuh, dan ke tingkat mana?
