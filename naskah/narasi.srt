@@ -1,0 +1,259 @@
+1
+00:00:01,600 --> 00:00:07,983
+Lampu neon menyala merah jingga. Kembang api tembaga memancarkan hijau kebiruan.
+
+2
+00:00:07,983 --> 00:00:13,966
+Cahaya bintang yang ditembakkan ke prisma ternyata dipotong garis-garis gelap yang tajam.
+
+3
+00:00:13,966 --> 00:00:19,306
+Setiap unsur punya warna dan garisnya sendiri, seperti sidik jari.
+
+4
+00:00:19,306 --> 00:00:27,075
+Pada awal abad kedua puluh, garis-garis ini menjadi petunjuk untuk membuka rahasia terbesar fisika:
+
+5
+00:00:27,075 --> 00:00:30,428
+bagaimana atom sebenarnya tersusun.
+
+6
+00:00:30,428 --> 00:00:34,247
+Jawabannya menuntun langsung ke kimia kuantum.
+
+7
+00:00:44,233 --> 00:00:48,707
+Video ini membahas fisika atom dalam tiga bagian.
+
+8
+00:00:48,707 --> 00:00:55,799
+Bagian pertama, jejak sejarah: model Thomson, percobaan Rutherford, dan krisis atom klasik.
+
+9
+00:00:55,799 --> 00:01:04,422
+Bagian kedua, atom Bohr: spektrum garis, postulat Bohr, tingkat energi, energi ionisasi, dan deret Balmer.
+
+10
+00:01:04,422 --> 00:01:11,991
+Bagian ketiga, menuju kimia kuantum: keterbatasan Bohr, gelombang elektron, dan orbital.
+
+11
+00:01:14,600 --> 00:01:25,111
+Tahun delapan belas sembilan puluh tujuh, J. J. Thomson menemukan elektron: partikel bermuatan negatif yang jauh lebih ringan dari atom.
+
+12
+00:01:25,111 --> 00:01:30,716
+Massanya sekitar seperseribu delapan ratus tiga puluh enam massa proton.
+
+13
+00:01:30,716 --> 00:01:40,029
+Karena atom netral, Thomson membayangkan elektron tertanam dalam bola bermuatan positif yang merata, seperti kismis dalam roti.
+
+14
+00:01:42,633 --> 00:01:50,514
+Di laboratorium Ernest Rutherford, Geiger dan Marsden menembakkan partikel alfa ke lembaran emas yang sangat tipis.
+
+15
+00:01:50,514 --> 00:01:56,697
+Bila model Thomson benar, partikel alfa seharusnya menembus dengan sedikit belokan.
+
+16
+00:01:56,697 --> 00:02:04,401
+Sebagian besar memang menembus lurus. Tetapi sekitar satu dari delapan ribu memantul ke belakang.
+
+17
+00:02:04,401 --> 00:02:12,860
+Rutherford berkata, rasanya seperti menembakkan peluru meriam ke kertas tisu, lalu pelurunya memantul kembali.
+
+18
+00:02:12,860 --> 00:02:22,570
+Tahun sembilan belas sebelas, Rutherford menyimpulkan: muatan positif dan hampir seluruh massa atom terkumpul dalam inti yang sangat kecil.
+
+19
+00:02:22,570 --> 00:02:35,114
+Inti berukuran sekitar sepuluh pangkat minus lima belas meter, seratus ribu kali lebih kecil dari atom. Bila atom sebesar stadion, intinya hanya sebesar kelereng.
+
+20
+00:02:37,700 --> 00:02:43,872
+Rutherford membayangkan elektron mengorbit inti seperti planet mengelilingi matahari.
+
+21
+00:02:43,872 --> 00:02:52,319
+Tetapi menurut teori elektromagnetik, muatan yang bergerak melingkar terus memancarkan gelombang elektromagnetik.
+
+22
+00:02:52,319 --> 00:03:00,966
+Elektron akan kehilangan energi, berputar spiral, dan jatuh ke inti dalam waktu sekitar sepersepuluh miliar detik.
+
+23
+00:03:00,966 --> 00:03:10,302
+Atom seharusnya runtuh seketika, dan spektrumnya seharusnya kontinu. Kenyataannya atom stabil, dan spektrumnya berupa garis.
+
+24
+00:03:12,900 --> 00:03:20,215
+Lewatkan arus listrik melalui gas hidrogen bertekanan rendah, lalu uraikan cahayanya dengan prisma.
+
+25
+00:03:20,215 --> 00:03:28,450
+Yang muncul bukan pelangi utuh, melainkan beberapa garis tajam: merah, hijau kebiruan, biru, dan ungu.
+
+26
+00:03:28,450 --> 00:03:33,867
+Garis merahnya berpanjang gelombang enam ratus lima puluh enam nanometer.
+
+27
+00:03:33,867 --> 00:03:46,588
+Tahun delapan belas delapan puluh lima, Johann Balmer menemukan bahwa panjang gelombang garis-garis ini mengikuti satu rumus sederhana. Tetapi tidak ada yang tahu mengapa.
+
+28
+00:03:49,200 --> 00:03:54,628
+Tahun sembilan belas tiga belas, Niels Bohr mengajukan gagasan berani.
+
+29
+00:03:54,628 --> 00:04:03,087
+Pertama, elektron hanya boleh berada pada orbit-orbit tertentu, dan di orbit itu ia tidak memancarkan energi.
+
+30
+00:04:03,087 --> 00:04:09,070
+Orbit yang diizinkan adalah yang momentum sudutnya kelipatan bulat h per dua pi.
+
+31
+00:04:09,070 --> 00:04:20,192
+Kedua, elektron dapat melompat antarorbit. Saat turun, ia memancarkan satu foton yang energinya tepat sama dengan selisih energi kedua orbit.
+
+32
+00:04:20,192 --> 00:04:27,230
+Gagasan ini melawan fisika klasik, tetapi menjelaskan semua garis hidrogen dengan tepat.
+
+33
+00:04:29,833 --> 00:04:41,253
+Dari postulat itu, Bohr menurunkan jari-jari orbit: r ke-n sama dengan n kuadrat dikali a nol, dengan a nol sekitar nol koma nol lima tiga nanometer.
+
+34
+00:04:41,253 --> 00:04:47,991
+Energinya E ke-n sama dengan minus tiga belas koma enam elektronvolt dibagi n kuadrat.
+
+35
+00:04:47,991 --> 00:04:57,959
+Tingkat pertama minus tiga belas koma enam, tingkat kedua minus tiga koma empat, tingkat ketiga minus satu koma lima satu elektronvolt.
+
+36
+00:04:57,959 --> 00:05:02,455
+Makin tinggi n, tingkatnya makin rapat, dan mendekati nol.
+
+37
+00:05:02,455 --> 00:05:08,292
+Tanda minus berarti elektron terikat: perlu energi untuk melepaskannya.
+
+38
+00:05:10,900 --> 00:05:19,147
+Energi ionisasi adalah energi minimum untuk melepaskan elektron dari keadaan dasar sampai tak terhingga.
+
+39
+00:05:19,147 --> 00:05:27,726
+Untuk hidrogen, itu berarti dari n sama dengan satu ke n tak terhingga: tepat tiga belas koma enam elektronvolt.
+
+40
+00:05:27,726 --> 00:05:36,939
+Dalam satuan kimia, itu sekitar seribu tiga ratus dua belas kilojoule per mol, persis sama dengan hasil pengukuran.
+
+41
+00:05:36,939 --> 00:05:46,063
+Foton dengan panjang gelombang di bawah sembilan puluh satu nanometer, di daerah ultraungu jauh, mampu mengionkan atom hidrogen.
+
+42
+00:05:48,667 --> 00:05:52,386
+Sekarang garis-garis hidrogen punya penjelasan.
+
+43
+00:05:52,386 --> 00:06:04,349
+Elektron yang turun dari tingkat tiga ke tingkat dua melepaskan foton satu koma delapan sembilan elektronvolt: itulah garis merah enam ratus lima puluh enam nanometer.
+
+44
+00:06:04,349 --> 00:06:16,226
+Dari empat ke dua, garis hijau kebiruan empat ratus delapan puluh enam nanometer. Dari lima ke dua, garis biru empat ratus tiga puluh empat nanometer.
+
+45
+00:06:16,226 --> 00:06:22,598
+Semua lompatan yang berakhir di tingkat dua membentuk deret Balmer, yang tampak oleh mata.
+
+46
+00:06:22,598 --> 00:06:31,800
+Lompatan yang berakhir di tingkat satu membentuk deret Lyman di ultraungu, dan yang berakhir di tingkat tiga membentuk deret Paschen di inframerah.
+
+47
+00:06:31,800 --> 00:06:39,912
+Satu rumus Rydberg menjelaskan semuanya: satu per lambda sama dengan R, dikali selisih satu per n kuadrat.
+
+48
+00:06:42,500 --> 00:06:50,781
+Model Bohr luar biasa untuk hidrogen. Tetapi ia gagal untuk atom berelektron banyak, bahkan untuk helium.
+
+49
+00:06:50,781 --> 00:07:00,360
+Ia tidak bisa menjelaskan mengapa sebagian garis lebih terang daripada yang lain, atau mengapa garis terbelah di dalam medan magnet.
+
+50
+00:07:00,360 --> 00:07:07,598
+Dan Bohr tidak menjelaskan mengapa hanya orbit tertentu yang diizinkan. Ia hanya menetapkannya.
+
+51
+00:07:10,200 --> 00:07:17,269
+Jawabannya datang dari de Broglie: elektron adalah gelombang, dengan panjang gelombang h per p.
+
+52
+00:07:17,269 --> 00:07:28,180
+Gelombang yang mengelilingi inti harus bertemu dirinya sendiri dengan mulus. Hanya orbit yang kelilingnya memuat bilangan bulat panjang gelombang yang bertahan.
+
+53
+00:07:28,180 --> 00:07:36,073
+Syarat itu tepat sama dengan aturan momentum sudut Bohr. Kuantisasi ternyata adalah gelombang berdiri.
+
+54
+00:07:36,073 --> 00:07:46,707
+Tahun sembilan belas dua puluh enam, Erwin Schrödinger menulis persamaan gelombang untuk elektron, dan tingkat energi hidrogen muncul dengan sendirinya.
+
+55
+00:07:49,300 --> 00:07:54,728
+Dalam mekanika kuantum, elektron tidak lagi punya lintasan yang tajam.
+
+56
+00:07:54,728 --> 00:08:01,597
+Yang ada adalah orbital: awan peluang yang menunjukkan di mana elektron mungkin ditemukan.
+
+57
+00:08:01,597 --> 00:08:09,890
+Orbital satu s berbentuk bola. Orbital dua p berbentuk dua cuping. Orbital tiga d punya empat cuping.
+
+58
+00:08:09,890 --> 00:08:19,103
+Bentuk-bentuk orbital inilah yang menentukan bagaimana atom berikatan, sudut ikatan molekul, dan susunan tabel periodik.
+
+59
+00:08:19,103 --> 00:08:24,254
+Di sinilah fisika atom berakhir, dan kimia kuantum dimulai.
+
+60
+00:08:26,667 --> 00:08:27,921
+Mari rangkum.
+
+61
+00:08:27,921 --> 00:08:33,916
+Rutherford menemukan inti yang sangat kecil, tetapi atom klasik seharusnya runtuh.
+
+62
+00:08:33,916 --> 00:08:42,294
+Bohr mengusulkan orbit terkuantisasi: E ke-n sama dengan minus tiga belas koma enam elektronvolt per n kuadrat.
+
+63
+00:08:42,294 --> 00:08:52,416
+Lompatan antartingkat menghasilkan garis spektrum: Lyman, Balmer, dan Paschen. Energi ionisasi hidrogen tiga belas koma enam elektronvolt.
+
+64
+00:08:52,416 --> 00:09:02,184
+De Broglie dan Schrödinger menunjukkan bahwa kuantisasi lahir dari elektron sebagai gelombang berdiri, dan orbit berubah menjadi orbital.
+
+65
+00:09:02,184 --> 00:09:12,395
+Jadi, setiap kali melihat cahaya berwarna dari suatu unsur, tanyakan: dari tingkat mana elektron itu jatuh, dan ke tingkat mana?
