@@ -154,7 +154,7 @@ export const Rutherford: React.FC = () => {
 
   // ---- zoom ----
   const zoom = ramp(t, cue(5) - 0.4, cue(5) + 0.4);
-  const zp = ramp(t, cue(5) + 0.4, wordOf(5, 'kecil') + 0.2, EASE_IN_OUT);
+  const zp = ramp(t, cue(5) + 1.0, wordOf(5, 'kecil') + 0.2, EASE_IN_OUT);
   const L = 5 * zp;
   const z = Math.pow(10, L);
   const Ra = R0 * z;
@@ -494,7 +494,7 @@ export const Rutherford: React.FC = () => {
                   ))
                 : null}
             </g>
-            <Label x={ZX} y={ZY - Ra - 28} size={26} font="mono" color={C.cyan} opacity={1 - ramp(L, 0.05, 0.5)}>
+            <Label x={ZX} y={Math.max(205, ZY - Ra - 28)} size={26} font="mono" color={C.cyan} opacity={1 - ramp(L, 0.02, 0.25)}>
               atom ≈ 10⁻¹⁰ m
             </Label>
             <Label x={ZX} y={ZY - 300} size={28} font="mono" weight={600} color={C.heat} opacity={ramp(L, 4.4, 5)}>

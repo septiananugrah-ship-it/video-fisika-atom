@@ -299,7 +299,7 @@ export const Title: React.FC = () => {
           </div>
           <div style={{fontFamily: FONT.mono, fontSize: 22, color: C.muted, marginTop: 40, opacity: ramp(t, 4.2, 5.2), letterSpacing: 3 + 2 * (1 - ramp(t, 4.2, 5.6))}}>
             elektron <span style={{color: C.work}}>turun tangga</span> → <span style={{color: nmColor(656)}}>foton</span> <span style={{color: nmColor(486)}}>ber</span>
-            <span style={{color: nmColor(434)}}>warna</span>
+            <span style={{color: C.pot}}>warna</span>
           </div>
         </AbsoluteFill>
       </AbsoluteFill>
