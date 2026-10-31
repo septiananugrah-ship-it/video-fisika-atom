@@ -1,345 +1,377 @@
 import React from 'react';
 import {AbsoluteFill} from 'remotion';
 import {BACK, EASE_IN_OUT, cyc, ramp, rand, win} from '../anim';
-import {Frac, Glow, Motes, Ripple, Stage, Stream, Sub, Twinkles, V} from '../components/primitives';
+import {Frac, Glow, Motes, Ripple, Stage, Sub, Sup, Twinkles, V} from '../components/primitives';
 import {useScene} from '../SceneContext';
 import {C, FONT, type Hue} from '../theme';
 
-// Enam kartu rangkuman magnet, masing-masing dengan animasi mini yang terus berulang (analitik):
-// kutub & garis medan (U → S) · arus → medan + muatan melingkar (gaya Lorentz ⊥ v) · induksi (magnet keluar-masuk
-// kumparan, jarum galvanometer ∝ kecepatan) · spektrometer massa (r ∝ m/q, ³⁵Cl : ³⁷Cl ≈ 3:1) · spin ↑↓ & Stern–Gerlach ·
-// NMR/MRI (spin berpresesi, gelombang RF, puncak); lalu pertanyaan kunci.
+// Enam kartu rangkuman Fisika Atom, masing-masing dengan animasi mini yang terus berulang (analitik):
+// inti Rutherford (alfa terbelok makin besar makin dekat inti + atom klasik runtuh) · orbit Bohr rₙ ∝ n² + tangga −13,6/n² ·
+// garis spektrum (Lyman → 1 UV, Balmer → 2 tampak 656/486/434/410, Paschen → 3 IR) · ionisasi 13,6 eV (n = 1 → ∞) ·
+// gelombang berdiri 2πr = nλ · awan orbital 1s/2p/3d; lalu pertanyaan kunci "dari tingkat mana … ke tingkat mana".
 const SW = 444;
 const SH = 64;
 
 const hex2 = (v: number) => Math.round(Math.max(0, Math.min(255, v))).toString(16).padStart(2, '0');
 const ph = (t: number, period: number, off = 0) => ((((t + off) / period) % 1) + 1) % 1;
 const MONO = {fontFamily: FONT.mono, fontSize: 15, fill: C.muted} as const;
-const bez = (p: [number, number][], u: number): [number, number] => {
-  const a = (1 - u) ** 3;
-  const b = 3 * (1 - u) ** 2 * u;
-  const c = 3 * (1 - u) * u * u;
-  const d = u ** 3;
-  return [a * p[0][0] + b * p[1][0] + c * p[2][0] + d * p[3][0], a * p[0][1] + b * p[1][1] + c * p[2][1] + d * p[3][1]];
-};
+const NM = {656: '#ff3b3b', 486: '#2fd6e0', 434: '#5b6bff', 410: '#9b5bff'} as const;
+const UV = '#c9b8ff';
+const IR = '#ff9c8a';
 
-/** 01 · Magnet batang: garis medan keluar U (merah) masuk S (biru), butir ungu mengalir; jarum kompas mengikuti. */
-const MiniPoles: React.FC<{t: number}> = ({t}) => {
-  const arcs: [number, number][][] = [-30, -16, 16, 30].map((h) => [
-    [30, 34],
-    [30 - Math.abs(h) * 0.6, 34 + h * 1.4],
-    [150 + Math.abs(h) * 0.6, 34 + h * 1.4],
-    [150, 34],
-  ]);
+/** y layar tingkat energi (E = 0 di yTop, n = 1 di yBot), berskala −13,6/n². */
+const lvY = (n: number, yTop: number, yBot: number) => yTop + (yBot - yTop) / (n * n);
+
+/** 01 · Rutherford: alfa (jingga) dibelokkan inti (merah) — makin dekat makin besar; spiral = elektron klasik runtuh. */
+const MiniRutherford: React.FC<{t: number}> = ({t}) => {
+  const nx = 84;
+  const ny = 32;
+  const tracks = [-24, -11, 3, 13, 26];
   return (
     <g>
-      {arcs.map((p, k) => (
-        <g key={k}>
-          <path d={`M${p[0].join(',')} C${p[1].join(',')} ${p[2].join(',')} ${p[3].join(',')}`} fill="none" stroke={C.spr} strokeWidth={1.4} strokeOpacity={0.55} />
-          {[0, 1].map((j) => {
-            const u = ph(t, 2.6, j * 1.3 + k * 0.4);
-            const [x, y] = bez(p, u);
-            return <circle key={j} cx={x} cy={y} r={3} fill={C.spr} opacity={cyc(u)} />;
-          })}
-        </g>
-      ))}
-      <rect x={30} y={26} width={60} height={16} rx={3} fill={C.heat} />
-      <rect x={90} y={26} width={60} height={16} rx={3} fill={C.pot} />
-      <text x={60} y={35} textAnchor="middle" dominantBaseline="central" fontFamily={FONT.head} fontWeight={700} fontSize={13} fill="#fff">
-        U
-      </text>
-      <text x={120} y={35} textAnchor="middle" dominantBaseline="central" fontFamily={FONT.head} fontWeight={700} fontSize={13} fill="#fff">
-        S
-      </text>
-      {(() => {
-        const a = 0.14 * Math.sin(t * 1.7) + 0.05 * Math.sin(t * 3.1);
-        const cx = 240;
-        const cy = 34;
+      <circle cx={nx} cy={ny} r={16} fill="url(#soft-heat)" />
+      {tracks.map((b, k) => {
+        const th = 2 * Math.atan(5 / Math.abs(b));
+        const sg = Math.sign(b);
+        const p0: [number, number] = [-14, ny + b];
+        const p1: [number, number] = [nx, ny + b];
+        const p2: [number, number] = [nx + 86 * Math.cos(th), ny + b + sg * 86 * Math.sin(th)];
+        const q = (u: number): [number, number] => [
+          (1 - u) ** 2 * p0[0] + 2 * (1 - u) * u * p1[0] + u * u * p2[0],
+          (1 - u) ** 2 * p0[1] + 2 * (1 - u) * u * p1[1] + u * u * p2[1],
+        ];
+        const u = ph(t, 2.4, k * 0.47);
+        const [x, y] = q(u);
         return (
-          <g transform={`rotate(${(a * 180) / Math.PI + 180} ${cx} ${cy})`}>
-            <circle cx={cx} cy={cy} r={22} fill="#0d1430" stroke="#8b9ad0" strokeWidth={1.5} />
-            <polygon points={`${cx + 18},${cy} ${cx},${cy - 5} ${cx},${cy + 5}`} fill={C.heat} />
-            <polygon points={`${cx - 18},${cy} ${cx},${cy - 5} ${cx},${cy + 5}`} fill={C.pot} />
+          <g key={b}>
+            <path d={`M${p0.join(',')} Q${p1.join(',')} ${p2.join(',')}`} fill="none" stroke={C.kin} strokeWidth={1.1} strokeOpacity={0.28} />
+            <circle cx={x} cy={y} r={3.6} fill={C.kin} opacity={cyc(u)} />
+          </g>
+        );
+      })}
+      <circle cx={nx} cy={ny} r={4.5} fill={C.heat} />
+      {(() => {
+        const cx = 250;
+        const cy = 32;
+        const u = ph(t, 3.2);
+        const pos = (v: number): [number, number] => {
+          const r = 26 * Math.pow(1 - v, 0.8);
+          const a = v * 5.5 * Math.PI * 2;
+          return [cx + r * Math.cos(a), cy - r * 0.9 * Math.sin(a)];
+        };
+        const spiral = Array.from({length: 60}, (_, i) => pos(i / 59));
+        const [x, y] = pos(u);
+        return (
+          <g>
+            <path d={spiral.map((p, i) => `${i ? 'L' : 'M'}${p[0].toFixed(1)},${p[1].toFixed(1)}`).join(' ')} fill="none" stroke={C.pot} strokeWidth={1} strokeOpacity={0.25} />
+            <circle cx={cx} cy={cy} r={3.5} fill={C.heat} />
+            {[1, 2, 3].map((k) => {
+              const [tx, ty] = pos(Math.max(0, u - k * 0.012));
+              return <circle key={k} cx={tx} cy={ty} r={3.2 - k * 0.6} fill={C.pot} opacity={cyc(u) * (0.5 - k * 0.12)} />;
+            })}
+            <circle cx={x} cy={y} r={4} fill={C.pot} opacity={cyc(u)} />
           </g>
         );
       })()}
       <text x={326} y={18} {...MONO} dominantBaseline="central" fill={C.heat}>
-        U → S
+        inti kecil
       </text>
-      <text x={326} y={42} {...MONO} dominantBaseline="central" fill={C.muted}>
-        tanpa monopol
+      <text x={326} y={42} {...MONO} dominantBaseline="central">
+        klasik: runtuh
       </text>
     </g>
   );
 };
 
-/** 02 · Kawat ⊙ (arus keluar) dikelilingi medan berlawanan jarum jam; muatan + melingkar dalam medan ⊗, F ⊥ v. */
-const MiniLorentz: React.FC<{t: number}> = ({t}) => {
-  const wx = 40;
-  const wy = 32;
-  const cx = 200;
+/** 02 · Bohr: orbit rₙ ∝ n² (elips semu-3D) dan tangga energi berskala −13,6/n² — elektron di n = 2. */
+const MiniBohr: React.FC<{t: number}> = ({t}) => {
+  const cx = 64;
   const cy = 32;
-  const r = 24;
-  const a = t * 2.4;
-  const x = cx + r * Math.cos(a);
-  const y = cy - r * Math.sin(a);
-  const vx = -Math.sin(a);
-  const vy = -Math.cos(a);
+  const a = t * 1.9;
   return (
     <g>
-      {[14, 24, 34].map((rr, i) => (
-        <g key={rr}>
-          <circle cx={wx} cy={wy} r={rr} fill="none" stroke={C.spr} strokeWidth={1.3} strokeOpacity={0.55 - i * 0.12} />
-          {(() => {
-            const g = t * (1.6 - i * 0.3) + i;
-            return <circle cx={wx + rr * Math.cos(g)} cy={wy - rr * Math.sin(g)} r={2.6} fill={C.spr} />;
-          })()}
-        </g>
+      {[1, 2, 3].map((n) => (
+        <ellipse key={n} cx={cx} cy={cy} rx={6 * n * n} ry={3.2 * n * n} fill="none" stroke={C.work} strokeWidth={n === 2 ? 1.8 : 1.2} strokeOpacity={n === 2 ? 0.75 : 0.4} />
       ))}
-      <circle cx={wx} cy={wy} r={8} fill="#0d1430" stroke={C.cyan} strokeWidth={2} />
-      <circle cx={wx} cy={wy} r={2.5} fill={C.cyan} />
-      {Array.from({length: 6}, (_, i) => {
-        const gx = 152 + (i % 3) * 48;
-        const gy = 8 + Math.floor(i / 3) * 48;
+      <circle cx={cx} cy={cy} r={8} fill="url(#soft-heat)" />
+      <circle cx={cx} cy={cy} r={3.8} fill={C.heat} />
+      <circle cx={cx + 24 * Math.cos(a)} cy={cy - 12.8 * Math.sin(a)} r={4.5} fill={C.pot} />
+      <circle cx={cx + 24 * Math.cos(a)} cy={cy - 12.8 * Math.sin(a)} r={10} fill="url(#soft-pot)" />
+      {[1, 2, 3, 4, 5].map((n) => {
+        const y = lvY(n, 4, 58);
         return (
-          <g key={i} stroke={C.spr} strokeOpacity={0.45} strokeWidth={1.3}>
-            <line x1={gx - 3} y1={gy - 3} x2={gx + 3} y2={gy + 3} />
-            <line x1={gx - 3} y1={gy + 3} x2={gx + 3} y2={gy - 3} />
+          <g key={n}>
+            <line x1={172} y1={y} x2={296} y2={y} stroke={C.work} strokeWidth={n === 1 ? 2.4 : 1.6} strokeOpacity={0.55 + 0.4 * (n <= 3 ? 1 : 0.4)} />
+            {n <= 2 ? (
+              <text x={164} y={y} {...MONO} fontSize={11} textAnchor="end" dominantBaseline="central" fill={C.work}>
+                {n}
+              </text>
+            ) : null}
           </g>
         );
       })}
-      <circle cx={cx} cy={cy} r={r} fill="none" stroke={C.work} strokeOpacity={0.25} strokeDasharray="3 4" />
-      <line x1={x} y1={y} x2={x + vx * 20} y2={y + vy * 20} stroke={C.work} strokeWidth={2.5} markerEnd="url(#arrow-work)" />
-      <line x1={x} y1={y} x2={x + (cx - x) * 0.55} y2={y + (cy - y) * 0.55} stroke={C.force} strokeWidth={2.5} markerEnd="url(#arrow-force)" />
-      <circle cx={x} cy={y} r={6} fill={C.heat} />
-      <text x={326} y={18} {...MONO} dominantBaseline="central" fill={C.cyan}>
-        I → B
-      </text>
-      <text x={326} y={42} {...MONO} dominantBaseline="central" fill={C.force}>
-        F ⊥ v
-      </text>
-    </g>
-  );
-};
-
-/** 03 · Induksi: magnet keluar-masuk kumparan; jarum galvanometer ∝ kecepatan (berbalik saat magnet berbalik arah). */
-const MiniInduction: React.FC<{t: number}> = ({t}) => {
-  const w = 1.8;
-  const mx = 62 + 34 * Math.sin(t * w);
-  const v = Math.cos(t * w);
-  return (
-    <g>
-      <rect x={mx - 50} y={26} width={30} height={16} rx={3} fill={C.pot} />
-      <rect x={mx - 20} y={26} width={30} height={16} rx={3} fill={C.heat} />
-      {Array.from({length: 5}, (_, i) => (
-        <ellipse key={i} cx={128 + i * 12} cy={34} rx={6} ry={20} fill="none" stroke={C.kin} strokeWidth={2.5} opacity={0.6 + 0.4 * Math.abs(v)} />
-      ))}
-      <path d="M176,54 L176,60 L246,60 L246,50" fill="none" stroke="#7d8fcc" strokeWidth={1.5} />
-      <path d="M128,54 L128,62" fill="none" stroke="#7d8fcc" strokeWidth={1.5} />
-      <circle cx={246} cy={34} r={18} fill="#0d1430" stroke="#8b9ad0" strokeWidth={1.5} />
-      <line x1={246} y1={44} x2={246 + 16 * Math.sin(0.8 * v)} y2={44 - 16 * Math.cos(0.8 * v)} stroke={C.kin} strokeWidth={2.5} strokeLinecap="round" />
-      <line x1={152 - 18 * v} y1={8} x2={152 + 18 * v} y2={8} stroke={C.kin} strokeWidth={2.5} markerEnd="url(#arrow-kin)" opacity={Math.min(1, Math.abs(v) * 3)} />
-      <text x={326} y={18} {...MONO} dominantBaseline="central" fill={C.kin}>
-        ΔΦ → ε
-      </text>
-      <text x={326} y={42} {...MONO} dominantBaseline="central" fill={C.muted}>
-        Lenz: melawan
-      </text>
-    </g>
-  );
-};
-
-/** 04 · Spektrometer massa: ion masuk medan ⊙, berbelok setengah lingkaran; ³⁵Cl (r kecil, 3 bagian) & ³⁷Cl (r besar, 1 bagian). */
-const MiniMassSpec: React.FC<{t: number}> = ({t}) => {
-  const x0 = 24;
-  const y0 = 62;
-  const r1 = 60;
-  const r2 = 60 * (37 / 35);
-  const path = (r: number, u: number): [number, number] => {
-    const a = Math.PI - Math.PI * u;
-    return [x0 + r + r * Math.cos(a), y0 - r * Math.sin(a)];
-  };
-  return (
-    <g>
-      {Array.from({length: 6}, (_, i) => {
-        const gx = 50 + (i % 3) * 36;
-        const gy = 18 + Math.floor(i / 3) * 26;
-        return (
-          <g key={i}>
-            <circle cx={gx} cy={gy} r={3.5} fill="none" stroke={C.spr} strokeOpacity={0.45} strokeWidth={1.2} />
-            <circle cx={gx} cy={gy} r={1} fill={C.spr} opacity={0.6} />
-          </g>
-        );
-      })}
-      <path d={`M${x0},${y0} A ${r1} ${r1} 0 0 1 ${x0 + 2 * r1},${y0}`} fill="none" stroke={C.work} strokeOpacity={0.4} strokeWidth={1.5} />
-      <path d={`M${x0},${y0} A ${r2} ${r2} 0 0 1 ${x0 + 2 * r2},${y0}`} fill="none" stroke={C.cyan} strokeOpacity={0.35} strokeWidth={1.5} />
-      {Array.from({length: 6}, (_, i) => {
-        const u = ph(t, 2.4, (i / 6) * 2.4);
-        const [x, y] = path(r1, u);
-        return <circle key={`a${i}`} cx={x} cy={y} r={3.2} fill={C.work} opacity={cyc(u)} />;
-      })}
-      {Array.from({length: 2}, (_, i) => {
-        const u = ph(t, 2.4, (i / 2) * 2.4 + 0.2);
-        const [x, y] = path(r2, u);
-        return <circle key={`b${i}`} cx={x} cy={y} r={3.2} fill={C.cyan} opacity={cyc(u)} />;
-      })}
-      <rect x={x0 + 2 * r1 - 8} y={y0 - 2} width={32} height={6} rx={2} fill="#3a4266" />
-      <circle cx={x0 + 2 * r1} cy={y0 + 1} r={5 + 1.5 * Math.sin(t * 4)} fill={C.work} opacity={0.8} />
-      <circle cx={x0 + 2 * r2} cy={y0 + 1} r={3 + Math.sin(t * 4 + 1)} fill={C.cyan} opacity={0.6} />
+      <line x1={172} y1={4} x2={296} y2={4} stroke={C.gold} strokeWidth={1} strokeDasharray="3 4" strokeOpacity={0.6} />
+      <circle cx={234 + 40 * Math.sin(t * 0.9)} cy={lvY(2, 4, 58)} r={4} fill={C.pot} />
       <text x={326} y={18} {...MONO} dominantBaseline="central" fill={C.work}>
-        r ∝ m/q
+        rₙ ∝ n²
       </text>
-      <text x={326} y={42} {...MONO} dominantBaseline="central" fill={C.cyan}>
-        ³⁵Cl:³⁷Cl ≈ 3:1
+      <text x={326} y={42} {...MONO} dominantBaseline="central">
+        rapat ke atas
       </text>
     </g>
   );
 };
 
-/** 05 · Spin: dua elektron ↑↓ dalam satu orbital; berkas Stern–Gerlach terbelah dua. */
-const MiniSpin: React.FC<{t: number}> = ({t}) => {
-  const b = 3 * Math.sin(t * 2.4);
+/** 03 · Spektrum: lompatan turun ke n = 1 (Lyman, UV), n = 2 (Balmer, tampak), n = 3 (Paschen, IR); garis Balmer berkedip. */
+const JUMPS: {x: number; from: number; to: number; col: string; nm?: keyof typeof NM}[] = [
+  {x: 28, from: 2, to: 1, col: UV},
+  {x: 44, from: 3, to: 1, col: UV},
+  {x: 76, from: 3, to: 2, col: NM[656], nm: 656},
+  {x: 92, from: 4, to: 2, col: NM[486], nm: 486},
+  {x: 108, from: 5, to: 2, col: NM[434], nm: 434},
+  {x: 124, from: 6, to: 2, col: NM[410], nm: 410},
+  {x: 152, from: 4, to: 3, col: IR},
+  {x: 166, from: 5, to: 3, col: IR},
+];
+const MiniSpectrum: React.FC<{t: number}> = ({t}) => {
+  const yT = 2;
+  const yB = 56;
+  const sx = (nm: number) => 214 + ((nm - 390) / (700 - 390)) * 224;
   return (
     <g>
-      <rect x={20} y={10} width={70} height={48} rx={6} fill="#0d1430" stroke={C.gold} strokeOpacity={0.6} strokeWidth={1.5} />
-      <line x1={42} y1={50 + b} x2={42} y2={18 + b} stroke={C.gold} strokeWidth={3} markerEnd="url(#arrow-gold)" />
-      <line x1={68} y1={18 - b} x2={68} y2={50 - b} stroke={C.gold} strokeWidth={3} markerEnd="url(#arrow-gold)" />
-      <path d="M150,20 L176,20 L170,34 L176,48 L150,48 L156,34 Z" fill="#3a4266" stroke="#8b9ad0" strokeWidth={1.2} />
-      {Array.from({length: 8}, (_, i) => {
-        const u = ph(t, 1.8, (i / 8) * 1.8);
-        const up = i % 2 === 0;
-        const x = 110 + u * 170;
-        const y = x < 163 ? 34 : 34 + (up ? -1 : 1) * Math.min(24, ((x - 163) ** 2) * 0.004 + (x - 163) * 0.12);
-        return <circle key={i} cx={x} cy={y} r={3} fill={C.gold} opacity={cyc(u)} />;
+      {[1, 2, 3, 4, 5, 6].map((n) => (
+        <line key={n} x1={14} y1={lvY(n, yT, yB)} x2={180} y2={lvY(n, yT, yB)} stroke={C.work} strokeWidth={n === 1 ? 2 : 1.2} strokeOpacity={0.6} />
+      ))}
+      {JUMPS.map((j, k) => {
+        const u = ph(t, 3.6, k * 0.45);
+        const y0 = lvY(j.from, yT, yB);
+        const y1 = lvY(j.to, yT, yB);
+        const head = y0 + (y1 - y0) * Math.min(1, u * 2.2);
+        const o = cyc(u);
+        return (
+          <g key={k} opacity={o}>
+            <line x1={j.x} y1={y0} x2={j.x} y2={head} stroke={j.col} strokeWidth={2.2} strokeLinecap="round" />
+            <circle cx={j.x} cy={head} r={2.6} fill={j.col} />
+          </g>
+        );
       })}
-      <text x={326} y={18} {...MONO} dominantBaseline="central" fill={C.gold}>
-        ↑↓ 1 orbital
+      <text x={36} y={66} {...MONO} fontSize={11} textAnchor="middle" fill={UV}>
+        Ly
       </text>
-      <text x={326} y={42} {...MONO} dominantBaseline="central" fill={C.muted}>
-        μ ≈ 1 μB
+      <text x={100} y={66} {...MONO} fontSize={11} textAnchor="middle" fill={NM[486]}>
+        Ba
+      </text>
+      <text x={159} y={66} {...MONO} fontSize={11} textAnchor="middle" fill={IR}>
+        Pa
+      </text>
+      <rect x={210} y={12} width={232} height={34} rx={4} fill="#060914" stroke="#3a4770" strokeWidth={1} />
+      {JUMPS.filter((j) => j.nm).map((j) => {
+        const k = JUMPS.indexOf(j);
+        const u = ph(t, 3.6, k * 0.45);
+        const flash = Math.exp(-Math.pow((u - 0.5) / 0.12, 2));
+        return (
+          <g key={j.nm}>
+            <rect x={sx(j.nm!) - 2.5} y={14} width={5} height={30} fill={j.col} opacity={0.45 + 0.55 * flash} />
+            <rect x={sx(j.nm!) - 7} y={14} width={14} height={30} fill={j.col} opacity={0.25 * flash} />
+          </g>
+        );
+      })}
+      <text x={326} y={60} {...MONO} fontSize={12} textAnchor="middle" dominantBaseline="central">
+        Balmer: tampak
       </text>
     </g>
   );
 };
 
-/** 06 · NMR/MRI: spin proton berpresesi di sekitar B, gelombang RF, puncak spektrum bernapas. */
-const MiniNMR: React.FC<{t: number}> = ({t}) => {
-  const w = t * 4;
-  const tipX = 40 + 14 * Math.cos(w);
-  const tipY = 16 + 4 * Math.sin(w);
-  const rf = Array.from({length: 41}, (_, i) => {
-    const x = 74 + i * 2;
-    return `${x},${34 - 9 * Math.sin(i * 0.5 - t * 6)}`;
+/** 04 · Ionisasi: elektron naik dari n = 1 melewati E = 0 (emas) lalu lepas; butuh 13,6 eV. */
+const MiniIon: React.FC<{t: number}> = ({t}) => {
+  const yT = 10;
+  const yB = 58;
+  const u = ph(t, 3.4);
+  const up = Math.min(1, u / 0.5);
+  const e = up < 1 ? 1 - Math.pow(1 - up, 2) : 1;
+  const fly = Math.max(0, (u - 0.5) / 0.5);
+  const x = 110 + fly * 170;
+  const y = yB + (yT - yB) * e - fly * 18;
+  return (
+    <g>
+      <rect x={14} y={-6} width={200} height={yT + 6} fill={C.gold} opacity={0.1 + 0.04 * Math.sin(t * 2)} />
+      <line x1={14} y1={yT} x2={214} y2={yT} stroke={C.gold} strokeWidth={1.6} strokeDasharray="4 4" />
+      {[1, 2, 3].map((n) => (
+        <line key={n} x1={14} y1={lvY(n, yT, yB)} x2={200} y2={lvY(n, yT, yB)} stroke={C.work} strokeWidth={n === 1 ? 2.2 : 1.3} strokeOpacity={0.6} />
+      ))}
+      <line x1={40} y1={yB - 3} x2={40} y2={yT + 4} stroke={C.gold} strokeWidth={2.4} markerEnd="url(#arrow-gold)" />
+      <text x={50} y={36} {...MONO} fontSize={12} dominantBaseline="central" fill={C.gold}>
+        13,6 eV
+      </text>
+      {[1, 2, 3, 4].map((k) => {
+        const uu = Math.max(0, u - k * 0.02);
+        const upk = Math.min(1, uu / 0.5);
+        const ek = upk < 1 ? 1 - Math.pow(1 - upk, 2) : 1;
+        const fk = Math.max(0, (uu - 0.5) / 0.5);
+        return <circle key={k} cx={110 + fk * 170} cy={yB + (yT - yB) * ek - fk * 18} r={4 - k * 0.7} fill={C.pot} opacity={cyc(u) * (0.5 - k * 0.1)} />;
+      })}
+      <circle cx={x} cy={y} r={4.6} fill={C.pot} opacity={cyc(u)} />
+      <circle cx={x} cy={y} r={11} fill="url(#soft-gold)" opacity={cyc(u) * fly} />
+      <text x={326} y={18} {...MONO} dominantBaseline="central" fill={C.gold}>
+        n = 1 → ∞
+      </text>
+      <text x={326} y={42} {...MONO} dominantBaseline="central">
+        ≈ 1312 kJ/mol
+      </text>
+    </g>
+  );
+};
+
+/** 05 · Gelombang berdiri: n = 4 gelombang pas mengelilingi orbit; tali dengan simpul tetap. */
+const MiniWave: React.FC<{t: number}> = ({t}) => {
+  const cx = 60;
+  const cy = 32;
+  const amp = 6 * Math.cos(t * 3.2);
+  const ring = Array.from({length: 73}, (_, i) => {
+    const f = (i / 72) * Math.PI * 2;
+    const r = 22 + amp * Math.sin(4 * f + 0.4);
+    return `${i ? 'L' : 'M'}${(cx + r * Math.cos(f)).toFixed(1)},${(cy - r * Math.sin(f)).toFixed(1)}`;
   }).join(' ');
-  const peak = (x: number, c: number, h: number) => 58 - h / (1 + ((x - c) / 4) ** 2);
-  const amp = 0.8 + 0.2 * Math.sin(t * 2);
-  const spec = Array.from({length: 61}, (_, i) => {
-    const x = 175 + i * 2;
-    return `${x},${(peak(x, 215, 40 * amp) + peak(x, 255, 26 * amp) - 58).toFixed(1)}`;
+  const str = Array.from({length: 61}, (_, i) => {
+    const x = 140 + (i / 60) * 160;
+    return `${i ? 'L' : 'M'}${x.toFixed(1)},${(32 + 16 * Math.sin((3 * Math.PI * i) / 60) * Math.cos(t * 3.2)).toFixed(1)}`;
   }).join(' ');
   return (
     <g>
-      <line x1={18} y1={60} x2={18} y2={8} stroke={C.spr} strokeWidth={2.5} markerEnd="url(#arrow-spr)" />
-      <ellipse cx={40} cy={16} rx={14} ry={4} fill="none" stroke={C.gold} strokeOpacity={0.35} strokeDasharray="2 3" />
-      <circle cx={40} cy={46} r={6} fill="#f2f5ff" />
-      <line x1={40} y1={46} x2={tipX} y2={tipY} stroke={C.gold} strokeWidth={3} markerEnd="url(#arrow-gold)" />
-      <polyline points={rf} fill="none" stroke={C.kin} strokeWidth={2} />
-      <line x1={175} y1={58} x2={295} y2={58} stroke={C.faint} strokeWidth={1.2} />
-      <polyline points={spec} fill="none" stroke={C.gold} strokeWidth={2} />
-      <text x={326} y={18} {...MONO} dominantBaseline="central" fill={C.gold}>
-        f ∝ B
+      <circle cx={cx} cy={cy} r={22} fill="none" stroke={C.cyan} strokeWidth={1} strokeDasharray="3 4" strokeOpacity={0.45} />
+      <path d={ring} fill="none" stroke={C.spr} strokeWidth={2.4} />
+      <circle cx={cx} cy={cy} r={4} fill={C.heat} />
+      <line x1={140} y1={32} x2={300} y2={32} stroke={C.muted} strokeWidth={0.8} strokeOpacity={0.4} />
+      <path d={str} fill="none" stroke={C.spr} strokeWidth={2.4} />
+      {[0, 1, 2, 3].map((k) => (
+        <circle key={k} cx={140 + (k * 160) / 3} cy={32} r={3.2} fill={C.heat} />
+      ))}
+      <text x={326} y={18} {...MONO} dominantBaseline="central" fill={C.spr}>
+        λ = h/p
+      </text>
+      <text x={326} y={42} {...MONO} dominantBaseline="central">
+        n = 4
+      </text>
+    </g>
+  );
+};
+
+/** 06 · Orbital: awan 1s berkelip, 2p berputar (fase ungu/emas), 3d empat cuping. */
+const lobe = (L: number, W: number) => `M0,0 C${L * 0.22},${W} ${L * 0.95},${W * 1.08} ${L},0 C${L * 0.95},${-W * 1.08} ${L * 0.22},${-W} 0,0 Z`;
+const MiniOrbital: React.FC<{t: number}> = ({t}) => {
+  const fs = 0.35 + 0.65 * Math.abs(Math.cos(t * 0.8));
+  return (
+    <g>
+      <circle cx={40} cy={30} r={26} fill="url(#soft-spr)" />
+      {Array.from({length: 46}, (_, i) => {
+        const raw = t * (0.5 + 0.4 * rand(i * 3.1)) + rand(i * 1.9);
+        const k = Math.floor(raw);
+        const s = i * 13.7 + k * 4.3;
+        const r = -0.5 * Math.log((0.01 + 0.99 * rand(s)) * (0.01 + 0.99 * rand(s + 1.1)) * (0.01 + 0.99 * rand(s + 2.3)));
+        const a = rand(s + 3.7) * Math.PI * 2;
+        const rr = Math.min(2.6, r) * 9 * Math.sqrt(1 - Math.pow(2 * rand(s + 5.1) - 1, 2));
+        return <circle key={i} cx={40 + rr * Math.cos(a)} cy={30 + rr * Math.sin(a)} r={1.5} fill={C.spr} opacity={cyc(raw - k)} />;
+      })}
+      <g transform={`translate(150 30) rotate(${-90 + 25 * Math.sin(t * 0.6)}) scale(${fs.toFixed(3)} 1)`}>
+        <path d={lobe(27, 11)} fill="url(#soft-spr)" stroke={C.spr} strokeWidth={1.6} />
+        <path d={lobe(27, 11)} transform="rotate(180)" fill="url(#soft-gold)" stroke={C.gold} strokeWidth={1.6} />
+      </g>
+      <g transform={`translate(260 30) rotate(${t * 18})`}>
+        {[45, 135, 225, 315].map((a, k) => (
+          <path key={a} d={lobe(25, 9)} transform={`rotate(${a})`} fill={`url(#soft-${k % 2 ? 'gold' : 'spr'})`} stroke={k % 2 ? C.gold : C.spr} strokeWidth={1.4} />
+        ))}
+      </g>
+      {['1s', '2p', '3d'].map((s, k) => (
+        <text key={s} x={[40, 150, 260][k]} y={66} {...MONO} fontSize={12} textAnchor="middle" fill={C.spr}>
+          {s}
+        </text>
+      ))}
+      <text x={326} y={18} {...MONO} dominantBaseline="central" fill={C.cyan}>
+        orbit →
       </text>
       <text x={326} y={42} {...MONO} dominantBaseline="central" fill={C.spr}>
-        NMR · MRI
+        orbital
       </text>
     </g>
   );
 };
 
-const ITEMS: {title: string; color: string; hue: Hue; body: React.ReactNode; size?: number; Mini: React.FC<{t: number}>}[] = [
+type Item = {title: string; color: string; hue: Hue; body: React.ReactNode; Mini: React.FC<{t: number}>; size?: number};
+const ITEMS: Item[] = [
   {
-    title: 'Kutub & garis medan',
+    title: 'Inti Rutherford',
     color: C.heat,
     hue: 'heat',
-    size: 32,
-    body: (
-      <span style={{fontFamily: FONT.head, fontWeight: 500}}>
-        keluar <span style={{color: C.heat}}>U</span> → masuk <span style={{color: C.pot}}>S</span>
-      </span>
-    ),
-    Mini: MiniPoles,
-  },
-  {
-    title: 'Arus & gaya Lorentz',
-    color: C.force,
-    hue: 'force',
     body: (
       <span>
-        <V color={C.force}>F</V> = <V>q</V>
-        <V color={C.work}>v</V> × <V color={C.spr}>B</V>
+        <V>r</V>
+        <Sub>atom</Sub> : <V>r</V>
+        <Sub>inti</Sub> ≈ 10<Sup>5</Sup>
       </span>
     ),
-    Mini: MiniLorentz,
+    Mini: MiniRutherford,
   },
   {
-    title: 'Induksi: Faraday & Lenz',
-    color: C.kin,
-    hue: 'kin',
-    body: (
-      <span>
-        <V>ε</V> = −<V>N</V>{' '}
-        <Frac
-          n={
-            <span>
-              d<V color={C.kin}>Φ</V>
-            </span>
-          }
-          d={
-            <span>
-              d<V>t</V>
-            </span>
-          }
-          size={0.62}
-        />
-      </span>
-    ),
-    Mini: MiniInduction,
-  },
-  {
-    title: 'Menimbang molekul',
+    title: 'Orbit Bohr terkuantisasi',
     color: C.work,
     hue: 'work',
     body: (
       <span>
-        <V>r</V> = <Frac n={<span><V>m</V><V color={C.work}>v</V></span>} d={<span><V>q</V><V color={C.spr}>B</V></span>} size={0.62} />
+        <V>E</V>
+        <Sub>n</Sub> = −<Frac n={<span>13,6 eV</span>} d={<span><V>n</V><Sup>2</Sup></span>} size={0.62} />
       </span>
     ),
-    Mini: MiniMassSpec,
+    Mini: MiniBohr,
   },
   {
-    title: 'Spin elektron',
-    color: C.gold,
-    hue: 'gold',
-    size: 38,
+    title: 'Garis spektrum',
+    color: C.cyan,
+    hue: 'cyan',
     body: (
       <span>
-        <V>m</V>
-        <Sub>s</Sub> = ±<Frac n="1" d="2" size={0.62} />
+        <V>h</V>
+        <V>f</V> = <V>E</V>
+        <Sub>i</Sub> − <V>E</V>
+        <Sub>f</Sub>
       </span>
     ),
-    Mini: MiniSpin,
+    Mini: MiniSpectrum,
   },
   {
-    title: 'NMR & MRI',
+    title: 'Energi ionisasi H',
+    color: C.gold,
+    hue: 'gold',
+    body: (
+      <span>
+        <V>E</V>
+        <Sub>ion</Sub> = <span style={{color: C.gold}}>13,6 eV</span>
+      </span>
+    ),
+    Mini: MiniIon,
+  },
+  {
+    title: 'Gelombang berdiri',
+    color: C.pot,
+    hue: 'pot',
+    body: (
+      <span>
+        2π<V>r</V> = <V>n</V>
+        <V color={C.spr}>λ</V>
+      </span>
+    ),
+    Mini: MiniWave,
+  },
+  {
+    title: 'Orbital',
     color: C.spr,
     hue: 'spr',
     body: (
       <span>
-        <V color={C.gold}>f</V> = <Frac n={<V>γ</V>} d={<span>2π</span>} size={0.62} />
-        <V color={C.spr}>B</V>
+        |<V color={C.spr}>ψ</V>|<Sup>2</Sup> <span style={{fontFamily: FONT.head, fontSize: 30, color: C.muted}}>= awan peluang</span>
       </span>
     ),
-    Mini: MiniNMR,
+    Mini: MiniOrbital,
   },
 ];
 
@@ -349,38 +381,39 @@ const CH = 244;
 
 export const Recap: React.FC = () => {
   const {t, cue, wordOf} = useScene();
-  const s3 = Math.max(cue(4) + 0.2, wordOf(4, 'lorentz') - 0.3);
-  const s4 = Math.max(s3 + 1.4, wordOf(4, 'elektron') - 0.3);
-  const s5 = Math.max(s4 + 1.4, wordOf(4, 'proton') - 0.3);
-  const starts = [cue(1), cue(2), cue(3), s3, s4, s5];
+  const s3 = Math.max(cue(3) + 1.6, wordOf(3, 'ionisasi') - 0.4);
+  const s5 = Math.max(cue(4) + 1.8, wordOf(4, 'orbit') - 0.5);
+  const starts = [cue(1), cue(2), cue(3), s3, cue(4), s5];
   const nextOf = (i: number) => (i < 5 ? starts[i + 1] : cue(5));
   const head = ramp(t, 0, 0.8);
   const q = ramp(t, cue(5) + 0.2, cue(5) + 1.2);
   const dim = 1 - 0.6 * ramp(t, cue(5), cue(5) + 1.0, EASE_IN_OUT);
-  const tA = wordOf(5, 'muatan');
-  const tB = wordOf(5, 'fluksnya');
-  const hlA = ramp(t, tA - 0.5, tA + 0.3);
+  const tA = wordOf(5, 'tingkat', 0);
+  const tB = wordOf(5, 'tingkat', 1);
+  const hlA = ramp(t, tA - 0.6, tA + 0.3);
   const hlB = ramp(t, tB - 0.6, tB + 0.3);
-  // kartu yang diacu pertanyaan menyala lagi: muatan bergerak → kartu 2 (Lorentz), fluks berubah → kartu 3 (induksi)
+  // kartu yang diacu pertanyaan menyala lagi: "dari tingkat mana" → kartu 2 (tingkat Bohr), "ke tingkat mana" → kartu 3 (deret spektrum)
   const reA = hlA * (1 - 0.6 * hlB);
   const reB = hlB;
   const reOf = (i: number) => (i === 1 ? reA : i === 2 ? reB : 0);
+  // ilustrasi kecil di kiri pertanyaan: elektron jatuh 3 → 2 memancarkan foton 656 nm
+  const fu = ph(t, 2.8);
+  const fall = ramp(fu, 0.15, 0.4, EASE_IN_OUT);
+  const yL3 = 772;
+  const yL2 = 836;
+  const phot = Math.max(0, (fu - 0.4) / 0.55);
   return (
     <AbsoluteFill>
       <Stage>
         <Motes x={960} y={470} rx={900} ry={330} n={36} color="spr" opacity={0.3} seed={5} />
-        {/* latar: jarum kompas kecil melayang & berputar pelan */}
-        {Array.from({length: 22}, (_, k) => {
+        {/* latar: foton kecil (warna garis Balmer) melayang naik */}
+        {Array.from({length: 18}, (_, k) => {
           const p = ph(t, 11 + 5 * rand(k), rand(k * 3.3) * 14);
           const x = 100 + rand(k * 5.1) * 1720 + 14 * Math.sin(t * 0.8 + k);
           const y = 880 - p * 700;
-          const a = rand(k * 2.7) * 360 + 25 * Math.sin(t * 0.6 + k);
-          return (
-            <g key={k} opacity={cyc(p) * 0.35} transform={`rotate(${a} ${x} ${y})`}>
-              <polygon points={`${x + 10},${y} ${x},${y - 3} ${x},${y + 3}`} fill={C.heat} />
-              <polygon points={`${x - 10},${y} ${x},${y - 3} ${x},${y + 3}`} fill={C.pot} />
-            </g>
-          );
+          const col = [NM[656], NM[486], NM[434], NM[410]][k % 4];
+          const d = Array.from({length: 13}, (_, i) => `${i ? 'L' : 'M'}${(x - 15 + i * 2.5).toFixed(1)},${(y + 4 * Math.sin(i * 1.1 + t * 6)).toFixed(1)}`).join(' ');
+          return <path key={k} d={d} fill="none" stroke={col} strokeWidth={1.8} opacity={cyc(p) * 0.4} transform={`rotate(${-60 + 30 * rand(k * 2.7)} ${x} ${y})`} />;
         })}
         {ITEMS.map((it, i) => {
           const x = COLS[i % 3];
@@ -402,37 +435,40 @@ export const Recap: React.FC = () => {
             </g>
           );
         })}
-        <Glow x={COLS[1]} y={ROWS[0]} r={300} color="cyan" opacity={0.4 * reA} />
-        <Glow x={COLS[2]} y={ROWS[0]} r={300} color="kin" opacity={0.4 * reB} />
+        <Glow x={COLS[1]} y={ROWS[0]} r={300} color="work" opacity={0.4 * reA} />
+        <Glow x={COLS[2]} y={ROWS[0]} r={300} color="cyan" opacity={0.4 * reB} />
         <g opacity={q}>
-          <Stream
-            pts={[
-              [90, 800],
-              [140, 800],
-              [190, 800],
-            ]}
-            color="cyan"
-            n={6}
-            speed={0.6}
-            r={6}
-            jitter={4}
-          />
-          <Stream
-            pts={[
-              [1730, 800],
-              [1780, 800],
-              [1830, 800],
-            ]}
-            color="kin"
-            n={6}
-            speed={0.6}
-            r={6}
-            jitter={4}
-          />
+          {/* kiri: lompatan 3 → 2 + foton merah */}
+          <line x1={96} y1={yL3} x2={196} y2={yL3} stroke={C.work} strokeWidth={3} strokeOpacity={0.4 + 0.6 * hlA} />
+          <line x1={96} y1={yL2} x2={196} y2={yL2} stroke={C.work} strokeWidth={3} strokeOpacity={0.4 + 0.6 * hlB} />
+          <text x={88} y={yL3} textAnchor="end" dominantBaseline="central" fontFamily={FONT.mono} fontSize={16} fill={C.work}>
+            3
+          </text>
+          <text x={88} y={yL2} textAnchor="end" dominantBaseline="central" fontFamily={FONT.mono} fontSize={16} fill={C.work}>
+            2
+          </text>
+          <circle cx={130} cy={yL3 + (yL2 - yL3) * fall} r={8} fill={C.pot} opacity={cyc(fu)} />
+          <circle cx={130} cy={yL3 + (yL2 - yL3) * fall} r={20} fill="url(#soft-pot)" opacity={cyc(fu)} />
+          {phot > 0 && phot < 1 ? (
+            <path
+              d={Array.from({length: 17}, (_, i) => `${i ? 'L' : 'M'}${(150 + phot * 70 + i * 3).toFixed(1)},${(yL2 - 26 - phot * 20 + 6 * Math.sin(i * 0.9 - t * 9)).toFixed(1)}`).join(' ')}
+              fill="none"
+              stroke={NM[656]}
+              strokeWidth={3}
+              opacity={Math.sin(Math.PI * phot)}
+            />
+          ) : null}
+          {/* kanan: garis spektrum merah 656 nm menyala */}
+          <rect x={1726} y={770} width={96} height={64} rx={6} fill="#060914" stroke="#3a4770" strokeWidth={1.5} />
+          <rect x={1771} y={772} width={6} height={60} fill={NM[656]} opacity={0.5 + 0.5 * Math.exp(-Math.pow((fu - 0.6) / 0.15, 2))} />
+          <rect x={1764} y={772} width={20} height={60} fill={NM[656]} opacity={0.25 * Math.exp(-Math.pow((fu - 0.6) / 0.15, 2))} />
+          <text x={1774} y={852} textAnchor="middle" fontFamily={FONT.mono} fontSize={15} fill={C.muted}>
+            656 nm
+          </text>
           <Twinkles x={960} y={800} rx={620} ry={40} n={7} color="gold" seed={7} />
         </g>
-        <Ripple x={620} y={800} p={(t - tA + 0.3) / 1.4} r={260} color="cyan" rings={2} />
-        <Ripple x={1330} y={800} p={(t - tB + 0.3) / 1.4} r={260} color="kin" rings={2} />
+        <Ripple x={600} y={800} p={(t - tA + 0.3) / 1.4} r={260} color="work" rings={2} />
+        <Ripple x={1360} y={800} p={(t - tB + 0.3) / 1.4} r={260} color="cyan" rings={2} />
       </Stage>
       <div style={{position: 'absolute', left: 0, right: 0, top: 150, textAlign: 'center', fontFamily: FONT.head, fontSize: 30, letterSpacing: 8 + 2 * (1 - head), color: C.gold, fontWeight: 600, opacity: head}}>
         RANGKUMAN
@@ -504,8 +540,8 @@ export const Recap: React.FC = () => {
           whiteSpace: 'nowrap',
         }}
       >
-        <span style={{color: C.cyan, textShadow: `0 0 ${26 * hlA}px ${C.cyan}aa`}}>Muatan apa yang sedang bergerak</span>, dan{' '}
-        <span style={{color: C.kin, textShadow: `0 0 ${26 * hlB}px ${C.kin}aa`}}>bagaimana fluksnya berubah</span>?
+        <span style={{color: C.work, textShadow: `0 0 ${26 * hlA}px ${C.work}aa`}}>Dari tingkat mana</span> elektron itu jatuh, dan{' '}
+        <span style={{color: C.cyan, textShadow: `0 0 ${26 * hlB}px ${C.cyan}aa`}}>ke tingkat mana</span>?
       </div>
     </AbsoluteFill>
   );

@@ -1,7 +1,7 @@
 import React from 'react';
-import {AbsoluteFill, Img, staticFile} from 'remotion';
+import {AbsoluteFill, Img, interpolateColors, staticFile} from 'remotion';
 import {EASE_IN_OUT, cyc, ramp, rand} from '../anim';
-import {Glow, Motes, Spark, Stage, Twinkles} from '../components/primitives';
+import {Glow, Motes, Ripple, Spark, Stage, Twinkles} from '../components/primitives';
 import {BRAND} from '../brand';
 import {useScene} from '../SceneContext';
 import {C, FONT, type Hue} from '../theme';
@@ -15,13 +15,13 @@ const REFS = [
   'RPS Fisika Umum S1 Kimia UNESA (fisika atom)',
 ];
 
-// butir yang mengorbit logo (kode warna magnet: kutub U merah, medan B ungu, kutub S biru, arus toska, fluks jingga, spin emas)
+// butir yang mengorbit logo (kode warna atom: inti merah, elektron biru, tingkat energi hijau, orbit klasik toska, gelombang ungu, ionisasi emas)
 const ORBIT: {hue: Hue; ph: number}[] = [
   {hue: 'heat', ph: 0},
-  {hue: 'spr', ph: 1.05},
-  {hue: 'pot', ph: 2.09},
+  {hue: 'pot', ph: 1.05},
+  {hue: 'work', ph: 2.09},
   {hue: 'cyan', ph: 3.14},
-  {hue: 'kin', ph: 4.19},
+  {hue: 'spr', ph: 4.19},
   {hue: 'gold', ph: 5.24},
 ];
 const OC = {x: 960, y: 188, rx: 190, ry: 48, tilt: -14, sp: 0.5};
@@ -36,115 +36,121 @@ const orbitPt = (a: number): [number, number] => {
 
 const fr = (v: number) => ((v % 1) + 1) % 1;
 
-const bez = (p: [number, number][], u: number): [number, number] => {
-  const a = (1 - u) ** 3;
-  const b = 3 * (1 - u) ** 2 * u;
-  const c = 3 * (1 - u) * u * u;
-  const d = u ** 3;
-  return [a * p[0][0] + b * p[1][0] + c * p[2][0] + d * p[3][0], a * p[0][1] + b * p[1][1] + c * p[2][1] + d * p[3][1]];
-};
+// seri Fisika Umum (10 video)
+const SERIES = ['Energi', 'Fluida Statis', 'Fluida Dinamis', 'Momentum', 'Osilasi', 'Gelombang', 'Termofisika', 'Listrik', 'Magnet', 'Atom'];
+const STRIP = {y: 872, dx: 118};
+const LINES: {from: number; nm: number; col: string}[] = [
+  {from: 3, nm: 656, col: '#ff3b3b'},
+  {from: 4, nm: 486, col: '#2fd6e0'},
+  {from: 5, nm: 434, col: '#5b6bff'},
+];
 
-/** Motif kiri: magnet batang dengan garis medan hidup (butir ungu mengalir di luar magnet dari U ke S). */
-const BarMagnet: React.FC<{x: number; y: number; t: number; opacity: number}> = ({x, y, t, opacity}) => {
+/** Motif kiri: tangga energi berskala −13,6/n²; elektron turun ke n = 2 memancarkan foton berwarna (656 / 486 / 434 nm bergantian). */
+const Ladder: React.FC<{x: number; y: number; t: number; opacity: number}> = ({x, y, t, opacity}) => {
   if (opacity <= 0.001) return null;
-  const cy = y - 130;
-  const xn = x + 45;
-  const xs = x + 205;
-  const breathe = 1 + 0.05 * Math.sin(t * 1.4);
-  const loops: [number, number][][] = [28, 62, 100, -28, -62, -100].map((h0) => {
-    const h = h0 * breathe;
-    return [
-      [xn, cy],
-      [xn - 0.6 * Math.abs(h), cy - 1.45 * h],
-      [xs + 0.6 * Math.abs(h), cy - 1.45 * h],
-      [xs, cy],
-    ];
-  });
+  const yTop = y - 250;
+  const yBot = y - 44;
+  const lv = (n: number) => yTop + (yBot - yTop) / (n * n);
+  const P = 3.6;
+  const raw = t / P;
+  const k = Math.floor(raw);
+  const u = raw - k;
+  const J = LINES[((k % 3) + 3) % 3];
+  const fall = ramp(u, 0.25, 0.42, EASE_IN_OUT);
+  const ex = x + 70;
+  const ey = lv(J.from) + (lv(2) - lv(J.from)) * fall;
+  const eo = Math.min(1, u * 6) * (1 - ramp(u, 0.75, 1));
+  const pu = Math.max(0, (u - 0.42) / 0.55);
+  const py = (lv(J.from) + lv(2)) / 2;
+  const photon = Array.from({length: 21}, (_, i) => `${i ? 'L' : 'M'}${(x + 88 + pu * 120 + i * 3).toFixed(1)},${(py + 7 * Math.sin(i * 0.95 - t * 10)).toFixed(1)}`).join(' ');
   return (
     <g opacity={opacity}>
-      <Glow x={xn} y={cy} r={110} color="heat" opacity={0.4} />
-      <Glow x={xs} y={cy} r={110} color="pot" opacity={0.4} />
-      {loops.map((p, k) => (
-        <g key={k}>
-          <path d={`M${p[0].join(',')} C${p[1].join(',')} ${p[2].join(',')} ${p[3].join(',')}`} fill="none" stroke={C.spr} strokeWidth={2.5} strokeOpacity={0.75} strokeDasharray="6 9" strokeDashoffset={-t * 30} />
-          {[0, 1].map((j) => {
-            const u = fr(t * 0.3 + j / 2 + k * 0.17);
-            const [px, py] = bez(p, u);
-            return (
-              <g key={j} opacity={cyc(u)}>
-                <circle cx={px} cy={py} r={9} fill="url(#soft-spr)" />
-                <circle cx={px} cy={py} r={3.2} fill={C.spr} />
-              </g>
-            );
-          })}
+      <Glow x={x + 120} y={y - 130} r={170} color="work" opacity={0.25} />
+      <line x1={x + 20} y1={yTop} x2={x + 210} y2={yTop} stroke={C.gold} strokeWidth={2} strokeDasharray="5 6" strokeOpacity={0.7} />
+      <text x={x + 12} y={yTop - 4} textAnchor="end" dominantBaseline="central" fontFamily={FONT.mono} fontSize={15} fill={C.gold}>
+        0
+      </text>
+      {[1, 2, 3, 4, 5, 6].map((n) => (
+        <g key={n}>
+          <line x1={x + 20} y1={lv(n)} x2={x + 210} y2={lv(n)} stroke={C.work} strokeWidth={n === 1 ? 4 : n === 2 ? 3.4 : 2.2} strokeOpacity={n <= 3 ? 0.85 : 0.5} />
+          {n <= 2 ? (
+            <text x={x + 12} y={lv(n)} textAnchor="end" dominantBaseline="central" fontFamily={FONT.mono} fontSize={16} fill={C.work}>
+              {n}
+            </text>
+          ) : null}
         </g>
       ))}
-      <rect x={xn} y={cy - 22} width={80} height={44} rx={6} fill={C.heat} />
-      <rect x={xn + 80} y={cy - 22} width={80} height={44} rx={6} fill={C.pot} />
-      <rect x={xn + 6} y={cy - 17} width={148} height={6} rx={3} fill="#fff" opacity={0.25} />
-      <text x={xn + 40} y={cy + 2} textAnchor="middle" dominantBaseline="central" fontFamily={FONT.head} fontWeight={700} fontSize={26} fill="#fff">
-        U
-      </text>
-      <text x={xn + 120} y={cy + 2} textAnchor="middle" dominantBaseline="central" fontFamily={FONT.head} fontWeight={700} fontSize={26} fill="#fff">
-        S
-      </text>
-      <text x={x + 125} y={y - 22} textAnchor="middle" fontFamily={FONT.mono} fontSize={18} fill={C.spr}>
-        medan: keluar U, masuk S
+      <circle cx={ex} cy={ey} r={22} fill="url(#soft-pot)" opacity={eo} />
+      <circle cx={ex} cy={ey} r={8} fill={C.pot} opacity={eo} />
+      <circle cx={ex - 2.5} cy={ey - 2.5} r={3} fill="#fff" opacity={0.7 * eo} />
+      {pu > 0 && pu < 1 ? (
+        <g opacity={Math.sin(Math.PI * pu)}>
+          <path d={photon} fill="none" stroke={J.col} strokeWidth={9} strokeOpacity={0.25} />
+          <path d={photon} fill="none" stroke={J.col} strokeWidth={3} />
+          <text x={x + 120 + pu * 120} y={py - 22} textAnchor="middle" fontFamily={FONT.mono} fontSize={16} fill={J.col}>
+            {J.nm} nm
+          </text>
+        </g>
+      ) : null}
+      <text x={x + 125} y={y - 18} textAnchor="middle" fontFamily={FONT.mono} fontSize={18} fill={C.work}>
+        turun → foton hf = ΔE
       </text>
       <rect x={x - 6} y={y - 4} width={262} height={10} rx={4} fill="#26305a" stroke="#5b6a9e" strokeWidth={2} />
     </g>
   );
 };
 
-/** Motif kanan: muatan + melingkar dalam medan ⊗ (F = qv × B selalu ke pusat, kelajuan tetap). */
-const Circler: React.FC<{x: number; y: number; t: number; opacity: number}> = ({x, y, t, opacity}) => {
+const lobeD = (L: number, W: number) => `M0,0 C${L * 0.22},${W} ${L * 0.95},${W * 1.08} ${L},0 C${L * 0.95},${-W * 1.08} ${L * 0.22},${-W} 0,0 Z`;
+
+/** Motif kanan: orbital 2p berputar semu-3D (cuping fase + ungu / − emas) dengan bidang simpul. */
+const P2: React.FC<{x: number; y: number; t: number; opacity: number}> = ({x, y, t, opacity}) => {
   if (opacity <= 0.001) return null;
   const cx = x + 125;
   const cy = y - 140;
-  const r = 70;
-  const w = 1.6;
-  const pos = (a: number): [number, number] => [cx + r * Math.cos(a), cy - r * Math.sin(a)];
-  const a = t * w;
-  const [px, py] = pos(a);
-  const trail = [1, 2, 3, 4, 5, 6].map((k) => pos(a - k * 0.09));
-  const vx = -Math.sin(a);
-  const vy = -Math.cos(a);
+  const th = t * 0.6;
+  const al = 0.35;
+  // sumbu orbital condong 30° dari tegak, berputar mengelilingi sumbu tegak
+  const ax = Math.sin(0.52) * Math.cos(th);
+  const ay = Math.sin(0.52) * Math.sin(th);
+  const az = Math.cos(0.52);
+  const sx = ax;
+  const sy = -(az * Math.cos(al) + ay * Math.sin(al));
+  const dep = -ay * Math.cos(al) + az * Math.sin(al);
+  const ls = Math.hypot(sx, sy);
+  const L = 92 * (1 + 0.03 * Math.sin(t * 1.6));
+  const Le = Math.max(L * ls, 36);
+  const ang = (Math.atan2(sy, sx) * 180) / Math.PI;
+  const plus = <path key="p" d={lobeD(Le, 38)} fill="url(#out-p)" stroke={C.spr} strokeWidth={2} />;
+  const minus = <path key="m" d={lobeD(Le, 38)} transform="rotate(180)" fill="url(#out-m)" stroke={C.gold} strokeWidth={2} />;
   return (
     <g opacity={opacity}>
-      <Glow x={cx} y={cy} r={140} color="spr" opacity={0.3} />
-      {Array.from({length: 20}, (_, i) => {
-        const gx = x + 20 + (i % 5) * 52;
-        const gy = y - 230 + Math.floor(i / 5) * 56;
-        const o = 0.35 + 0.15 * Math.sin(t * 1.5 + i);
-        return (
-          <g key={i} stroke={C.spr} strokeOpacity={o} strokeWidth={2} strokeLinecap="round">
-            <line x1={gx - 5} y1={gy - 5} x2={gx + 5} y2={gy + 5} />
-            <line x1={gx - 5} y1={gy + 5} x2={gx + 5} y2={gy - 5} />
-          </g>
-        );
-      })}
-      <circle cx={cx} cy={cy} r={r} fill="none" stroke={C.work} strokeOpacity={0.25} strokeWidth={2} strokeDasharray="5 7" />
-      <Spark x={px} y={py} r={9} color="heat" trail={trail} />
-      <line x1={px} y1={py} x2={px + vx * 46} y2={py + vy * 46} stroke={C.work} strokeWidth={4} markerEnd="url(#arrow-work)" />
-      <line x1={px} y1={py} x2={px + (cx - px) * 0.55} y2={py + (cy - py) * 0.55} stroke={C.force} strokeWidth={4} markerEnd="url(#arrow-force)" />
-      <text x={px} y={py + 1} textAnchor="middle" dominantBaseline="central" fontFamily={FONT.head} fontWeight={700} fontSize={14} fill="#fff">
-        +
-      </text>
-      <text x={x + 125} y={y - 22} textAnchor="middle" fontFamily={FONT.mono} fontSize={18} fill={C.force}>
-        F ⊥ v → lintasan melingkar
+      <Glow x={cx} y={cy} r={170} color="spr" opacity={0.35} />
+      <g transform={`translate(${cx} ${cy}) rotate(${ang})`}>
+        <ellipse cx={0} cy={0} rx={22} ry={96} fill={C.heat} fillOpacity={0.07} stroke={C.heat} strokeOpacity={0.5} strokeWidth={1.6} strokeDasharray="6 6" />
+        {dep >= 0 ? [minus, plus] : [plus, minus]}
+        <text x={Le * 0.6} y={0} textAnchor="middle" dominantBaseline="central" fontFamily={FONT.head} fontWeight={700} fontSize={24} fill="#fff" transform={`rotate(${-ang} ${Le * 0.6} 0)`}>
+          +
+        </text>
+        <text x={-Le * 0.6} y={0} textAnchor="middle" dominantBaseline="central" fontFamily={FONT.head} fontWeight={700} fontSize={24} fill="#fff" transform={`rotate(${-ang} ${-Le * 0.6} 0)`}>
+          −
+        </text>
+      </g>
+      <circle cx={cx} cy={cy} r={6} fill={C.heat} />
+      <text x={x + 125} y={y - 18} textAnchor="middle" fontFamily={FONT.mono} fontSize={18} fill={C.spr}>
+        orbital 2p: dua cuping
       </text>
       <rect x={x - 6} y={y - 4} width={262} height={10} rx={4} fill="#26305a" stroke="#5b6a9e" strokeWidth={2} />
     </g>
   );
 };
 
-/** Penutup: logo SCIENTIAN, tagline, nama penyusun, rujukan, dan pil penutup seri (motif magnet). */
+/** Penutup: logo SCIENTIAN, tagline, nama penyusun, rujukan, jejak seri (10 video), dan pil penutup seri (motif atom). */
 export const Outro: React.FC = () => {
   const {t, dur} = useScene();
   const logo = ramp(t, 0.2, 1.6);
   const name = ramp(t, 1.4, 2.4);
   const by = ramp(t, 2.4, 3.4);
-  const next = ramp(t, 6, 7);
+  const next = ramp(t, 9.2, 10.2);
   const motif = ramp(t, 1.0, 3.0);
   const out = 1 - ramp(t, dur - 1.6, dur - 0.1, EASE_IN_OUT);
   const orbitOn = ramp(t, 0.8, 2.2);
@@ -165,30 +171,86 @@ export const Outro: React.FC = () => {
     }
     return d;
   })();
+  // jejak seri: titik menyala berurutan
+  const s0 = 6.0;
+  const sStep = 0.32;
+  const stripOn = ramp(t, 5.4, 6.2);
+  const sx = (i: number) => 960 + (i - 4.5) * STRIP.dx;
+  const headP = Math.min(9, Math.max(0, (t - s0) / sStep));
+  const lastOn = ramp(t, s0 + 9 * sStep, s0 + 9 * sStep + 0.5);
   return (
     <AbsoluteFill style={{opacity: out}}>
       <Stage>
+        <defs>
+          <radialGradient id="out-p" cx="62%" cy="50%" r="65%">
+            <stop offset="0%" stopColor="#e6d4ff" stopOpacity="0.9" />
+            <stop offset="55%" stopColor={C.spr} stopOpacity="0.6" />
+            <stop offset="100%" stopColor={C.spr} stopOpacity="0.25" />
+          </radialGradient>
+          <radialGradient id="out-m" cx="62%" cy="50%" r="65%">
+            <stop offset="0%" stopColor="#fff0c4" stopOpacity="0.9" />
+            <stop offset="55%" stopColor={C.gold} stopOpacity="0.55" />
+            <stop offset="100%" stopColor={C.gold} stopOpacity="0.22" />
+          </radialGradient>
+        </defs>
         <Glow x={960} y={240} r={440} color="pot" opacity={0.3 * logo} />
         <Glow x={960} y={188} r={200} color="spr" opacity={0.25 * logo} />
         <Motes x={960} y={300} rx={620} ry={260} n={40} color="spr" opacity={0.45 * logo} seed={13} />
-        {/* jarum kompas kecil melayang pelan & berayun */}
-        {Array.from({length: 24}, (_, k) => {
-          const p = ((((t + rand(k * 3.1) * 14) / (10 + 5 * rand(k))) % 1) + 1) % 1;
+        {/* atom-atom kecil melayang naik pelan (inti merah, elektron biru mengorbit) */}
+        {Array.from({length: 20}, (_, k) => {
+          const p = fr((t + rand(k * 3.1) * 14) / (10 + 5 * rand(k)));
           const x = 60 + rand(k * 5.3) * 1800 + 10 * Math.sin(t * 0.7 + k);
           const y = 1000 - p * 900;
-          const a = rand(k * 2.9) * 360 + 30 * Math.sin(t * 0.5 + k);
+          const tilt = rand(k * 2.9) * 180;
+          const a = t * (1.5 + rand(k * 7.1)) + k;
+          const c = Math.cos((tilt * Math.PI) / 180);
+          const s = Math.sin((tilt * Math.PI) / 180);
+          const exx = 11 * Math.cos(a);
+          const eyy = 4.5 * Math.sin(a);
           return (
-            <g key={k} opacity={cyc(p) * 0.4 * logo} transform={`rotate(${a} ${x} ${y})`}>
-              <polygon points={`${x + 11},${y} ${x},${y - 3.5} ${x},${y + 3.5}`} fill={C.heat} />
-              <polygon points={`${x - 11},${y} ${x},${y - 3.5} ${x},${y + 3.5}`} fill={C.pot} />
+            <g key={k} opacity={cyc(p) * 0.4 * logo}>
+              <ellipse cx={x} cy={y} rx={11} ry={4.5} fill="none" stroke={C.cyan} strokeWidth={0.8} strokeOpacity={0.6} transform={`rotate(${tilt} ${x} ${y})`} />
+              <circle cx={x} cy={y} r={2.6} fill={C.heat} />
+              <circle cx={x + exx * c - eyy * s} cy={y + exx * s + eyy * c} r={1.8} fill={C.pot} />
             </g>
           );
         })}
         <path d={ellipseD} fill="none" stroke={C.spr} strokeOpacity={0.18 * orbitOn} strokeWidth={1.5} strokeDasharray="4 10" strokeDashoffset={-t * 14} />
         {ring(false)}
-        <BarMagnet x={110} y={860} t={t} opacity={0.85 * motif} />
-        <Circler x={1560} y={860} t={t} opacity={0.85 * motif} />
+        <Ladder x={110} y={860} t={t} opacity={0.85 * motif} />
+        <P2 x={1560} y={860} t={t} opacity={0.85 * motif} />
         <Twinkles x={960} y={530} rx={360} ry={30} n={4} color="gold" opacity={by * 0.7} seed={17} />
+        {/* jejak seri Fisika Umum: 10 video menyala berurutan */}
+        <g opacity={stripOn}>
+          <line x1={sx(0)} y1={STRIP.y} x2={sx(9)} y2={STRIP.y} stroke={C.faint} strokeWidth={2} />
+          <line x1={sx(0)} y1={STRIP.y} x2={sx(0) + headP * STRIP.dx} y2={STRIP.y} stroke={C.cyan} strokeWidth={2} strokeOpacity={0.7} />
+          {headP > 0 && headP < 9 ? <Spark x={sx(0) + headP * STRIP.dx} y={STRIP.y} r={3.5} color="cyan" /> : null}
+          {SERIES.map((s, i) => {
+            const li = ramp(t, s0 + i * sStep - 0.1, s0 + i * sStep + 0.35);
+            const last = i === 9;
+            const col = interpolateColors(li, [0, 1], [C.faint, last ? C.gold : C.cyan]);
+            const r = last ? 8 + 1.2 * Math.sin(t * 2.4) * lastOn : 5.5;
+            return (
+              <g key={s}>
+                {last ? <Glow x={sx(i)} y={STRIP.y} r={36} color="gold" opacity={0.8 * li} /> : null}
+                <circle cx={sx(i)} cy={STRIP.y} r={r} fill={col} stroke={col} strokeWidth={1.5} />
+                <text
+                  x={sx(i)}
+                  y={STRIP.y + 18}
+                  textAnchor="middle"
+                  dominantBaseline="central"
+                  fontFamily={FONT.sans}
+                  fontSize={13}
+                  fontWeight={last ? 600 : 400}
+                  fill={interpolateColors(li, [0, 1], [C.faint, last ? C.gold : C.muted])}
+                >
+                  {s}
+                </text>
+              </g>
+            );
+          })}
+          <Ripple x={sx(9)} y={STRIP.y} p={(t - s0 - 9 * sStep) / 1.4} r={70} color="gold" rings={2} />
+        </g>
       </Stage>
       <AbsoluteFill style={{alignItems: 'center', paddingTop: 70}}>
         <Img
@@ -231,9 +293,9 @@ export const Outro: React.FC = () => {
             opacity: next,
             padding: '10px 28px',
             borderRadius: 999,
-            border: `2px solid ${C.spr}`,
+            border: `2px solid ${C.gold}`,
             background: 'rgba(10,16,36,0.85)',
-            boxShadow: `0 0 ${16 + 12 * (0.5 + 0.5 * Math.sin(t * 2))}px ${C.spr}66`,
+            boxShadow: `0 0 ${16 + 12 * (0.5 + 0.5 * Math.sin(t * 2))}px ${C.gold}66, 0 0 30px ${C.spr}44`,
             translate: `0px ${(1 - next) * 14}px`,
           }}
         >
