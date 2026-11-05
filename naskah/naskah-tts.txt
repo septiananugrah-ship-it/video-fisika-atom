@@ -8,7 +8,7 @@ roadmap-00	Video ini membahas fisika atom dalam tiga bagian.
 roadmap-01	Bagian pertama, jejak sejarah: model Tomson, percobaan Raderford, dan krisis atom klasik.
 roadmap-02	Bagian kedua, atom Bohr: spektrum garis, postulat Bohr, tingkat energi, energi ionisasi, dan deret Balmer.
 roadmap-03	Bagian ketiga, menuju kimia kuantum: keterbatasan Bohr, gelombang elektron, dan orbital.
-thomson-00	Tahun delapan belas sembilan puluh tujuh, J. J. Tomson menemukan elektron: partikel bermuatan negatif yang jauh lebih ringan dari atom.
+thomson-00	Tahun delapan belas sembilan puluh tujuh, Je Je Tomson menemukan elektron: partikel bermuatan negatif yang jauh lebih ringan dari atom.
 thomson-01	Massanya sekitar seperseribu delapan ratus tiga puluh enam massa proton.
 thomson-02	Karena atom netral, Tomson membayangkan elektron tertanam dalam bola bermuatan positif yang merata, seperti kismis dalam roti.
 rutherford-00	Di laboratorium Ernest Raderford, Gaiger dan Marsden menembakkan partikel alfa ke lembaran emas yang sangat tipis.

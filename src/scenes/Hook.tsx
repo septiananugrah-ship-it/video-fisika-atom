@@ -339,7 +339,7 @@ export const Hook: React.FC = () => {
               lampu neon
             </Label>
             <Strip x0={240} x1={700} y={700} h={56} lines={NE_LINES} p={neSp} t={t} seed={1} />
-            <Label x={210} y={700} size={28} font="mono" color={C.muted} anchor="end" opacity={neSp > 0 ? 1 : 0.4}>
+            <Label x={210} y={700} size={28} font="mono" color={C.muted} anchor="end" opacity={0.4 + 0.6 * Math.min(1, neSp * 8)}>
               Ne
             </Label>
 
@@ -348,7 +348,7 @@ export const Hook: React.FC = () => {
               kembang api tembaga
             </Label>
             <Strip x0={1200} x1={1660} y={700} h={56} lines={CU_LINES} p={cuSp} t={t} seed={2} />
-            <Label x={1700} y={700} size={28} font="mono" color={C.muted} anchor="start" opacity={cuSp > 0 ? 1 : 0.4}>
+            <Label x={1700} y={700} size={28} font="mono" color={C.muted} anchor="start" opacity={0.4 + 0.6 * Math.min(1, cuSp * 8)}>
               Cu
             </Label>
             <Label x={960} y={800} size={22} font="mono" color={C.muted} opacity={ramp(t, wordOf(0, 'hijau'), wordOf(0, 'hijau') + 0.8) * 0.85}>
